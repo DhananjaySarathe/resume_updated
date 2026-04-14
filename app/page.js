@@ -1,22 +1,22 @@
 'use client'
 
 import React, { useState, useEffect } from 'react';
-import { 
-  Github, 
-  Linkedin, 
-  Mail, 
-  Phone, 
-  Download, 
-  ExternalLink, 
-  Code, 
-  Briefcase, 
-  GraduationCap, 
-  User, 
-  Cpu, 
-  ChevronDown, 
-  Menu, 
-  X, 
-  Sparkles, 
+import {
+  Github,
+  Linkedin,
+  Mail,
+  Phone,
+  Download,
+  ExternalLink,
+  Code,
+  Briefcase,
+  GraduationCap,
+  User,
+  Cpu,
+  ChevronDown,
+  Menu,
+  X,
+  Sparkles,
   Zap,
   Globe,
   Database,
@@ -51,9 +51,9 @@ const ResumeWebsite = () => {
       location: "Bengaluru, India"
     },
     socials: {
-      linkedin: "https://www.linkedin.com/in/dhananjay-sarathe-835434149/", 
-      github: "https://github.com/DhananjaySarathe",   
-      leetcode: "https://leetcode.com/dhananjaysarathe26/"  
+      linkedin: "https://www.linkedin.com/in/dhananjay-sarathe-835434149/",
+      github: "https://github.com/DhananjaySarathe",
+      leetcode: "https://leetcode.com/dhananjaysarathe26/"
     }
   };
 
@@ -138,16 +138,30 @@ const ResumeWebsite = () => {
       ]
     },
     {
-      title: "Brandbooster",
-      category: "AI Analytics",
-      description: "Website that provides Actionable Shopper Insights About your Product or your Competition In 5 Minutes.",
-      tech: ["AI", "Data Scraping", "Charts"],
-      url: "https://brandbooster.ai/",
+      title: "Prunify",
+      category: "Developer Tool / CLI",
+      description: "AI-assisted Node.js CLI for codebase cleanup and dependency analysis.",
+      tech: ["Node.js", "TypeScript", "AST/Graph Analysis"],
+      url: "https://www.npmjs.com/package/prunify",
       github: "",
       points: [
-        "Insights of your products generated from reviews.",
-        "Competition analysis using Reviews.",
-        "Charts and recommendations about product sale."
+        "Engineered a zero-config Node.js CLI tool that constructs an import graph to automatically detect dead exports, dependency cycles, unused public assets, and npm package drift in TS/JS codebases.",
+        "Designed a deterministic analysis engine that isolates logic constraints from LLM execution, generating a structured ai_prompt.tsx to safely hand off duplicate code clustering to Copilot/Cursor without hallucination risks.",
+        "Implemented automated CI/CD pipeline gating (--ci flag) to prevent technical debt accumulation, alongside an interactive terminal interface generating comprehensive HTML health reports."
+      ]
+    },
+    {
+      title: "StockTax Pro",
+      category: "Tax Planning Platform",
+      description: "Tax optimization platform for Indian traders with multi-broker support and GPT-assisted recommendations.",
+      tech: ["React", "TypeScript", "Tailwind CSS", "Zustand", "SheetJS", "GPT-4o-mini"],
+      url: "https://stock-tax-pro.vercel.app/",
+      github: "",
+      points: [
+        "Built a multi-broker tax engine supporting AngelOne, Zerodha, and Upstox — auto-detecting file formats, normalizing trades across brokers under one PAN, and computing consolidated STCG/LTCG liability with pre/post July 2024 tax rate awareness.",
+        "Engineered a Tax Loss Harvesting optimizer that scores unrealized loss positions and recommends minimum stocks to sell for maximum tax offset — accounting for Indian offset rules, brokerage costs, and holding period proximity to LTCG conversion.",
+        "Integrated GPT-4o-mini to deliver personalized harvest recommendations — flagging missed exemptions, wash sale risks, and optimal timing based on each user's portfolio.",
+        "Built a Tax Simulation engine with what-if trade modeling, advance tax planning (Section 234B/234C), and scenario comparison to project year-end liability before executing trades."
       ]
     }
   ];
@@ -199,7 +213,7 @@ const ResumeWebsite = () => {
   const handleFormSubmit = (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+
     // Create mailto link with form data
     const subject = encodeURIComponent(formData.subject || 'Contact from Portfolio');
     const body = encodeURIComponent(
@@ -209,10 +223,10 @@ const ResumeWebsite = () => {
       `Message:\n${formData.message}`
     );
     const mailtoLink = `mailto:${personalInfo.contact.email}?subject=${subject}&body=${body}`;
-    
+
     // Open email client
     window.location.href = mailtoLink;
-    
+
     // Reset form after a short delay
     setTimeout(() => {
       setFormData({ name: '', email: '', subject: '', message: '' });
@@ -231,9 +245,8 @@ const ResumeWebsite = () => {
   const NavLink = ({ id, label }) => (
     <button
       onClick={() => scrollToSection(id)}
-      className={`relative px-4 py-2 text-sm font-medium transition-colors duration-300 ${
-        activeSection === id ? 'text-cyan-400' : 'text-slate-400 hover:text-white'
-      }`}
+      className={`relative px-4 py-2 text-sm font-medium transition-colors duration-300 ${activeSection === id ? 'text-cyan-400' : 'text-slate-400 hover:text-white'
+        }`}
     >
       {label}
       {activeSection === id && (
@@ -244,20 +257,19 @@ const ResumeWebsite = () => {
 
   return (
     <div className="min-h-screen bg-[#050505] text-slate-200 font-sans selection:bg-cyan-500/30 overflow-x-hidden">
-      
+
       {/* --- Ambient Background Effects --- */}
       <div className="fixed inset-0 z-0 pointer-events-none">
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:50px_50px] [mask-image:radial-gradient(ellipse_80%_80%_at_50%_50%,black_20%,transparent_100%)]"></div>
-        <div 
+        <div
           className="hidden md:block absolute w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[100px] -translate-x-1/2 -translate-y-1/2 pointer-events-none transition-transform duration-100 ease-out"
           style={{ left: mousePos.x, top: mousePos.y }}
         ></div>
       </div>
 
       {/* Navigation */}
-      <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-        scrolled ? 'bg-[#050505]/80 backdrop-blur-md border-b border-white/5 py-4' : 'bg-transparent py-6'
-      }`}>
+      <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-[#050505]/80 backdrop-blur-md border-b border-white/5 py-4' : 'bg-transparent py-6'
+        }`}>
         <div className="container mx-auto px-6 flex justify-between items-center">
           <div className="text-xl font-bold tracking-tight text-white cursor-pointer flex items-center gap-2" onClick={() => scrollToSection('home')}>
             <Terminal size={20} className="text-cyan-400" />
@@ -273,7 +285,7 @@ const ResumeWebsite = () => {
             <NavLink id="contact" label="Contact" />
           </div>
 
-          <button 
+          <button
             className="md:hidden text-white p-2"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
@@ -310,9 +322,9 @@ const ResumeWebsite = () => {
               <button onClick={() => scrollToSection('projects')} className="px-8 py-3 bg-cyan-500 hover:bg-cyan-400 text-black font-semibold rounded-lg transition-all shadow-[0_0_20px_rgba(6,182,212,0.3)]">
                 View My Work
               </button>
-              <button className="px-8 py-3 bg-white/5 hover:bg-white/10 text-white font-medium rounded-lg border border-white/10 transition-all flex items-center gap-2">
+              <a href="https://drive.google.com/file/d/1rbqqwgv6kbOiYPGGvVe-xBZfqyIHPD4k/view?usp=sharing" target="_blank" rel="noopener noreferrer" className="px-8 py-3 bg-white/5 hover:bg-white/10 text-white font-medium rounded-lg border border-white/10 transition-all flex items-center gap-2">
                 <Download size={18} /> Resume
-              </button>
+              </a>
             </div>
             <div className="flex gap-6 pt-4 text-slate-500">
               <a href={personalInfo.socials.github} target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
@@ -326,7 +338,7 @@ const ResumeWebsite = () => {
               </a>
             </div>
           </div>
-          
+
           {/* Hero Visual */}
           <div className="relative hidden md:flex justify-center">
             <div className="relative w-80 h-80">
@@ -353,7 +365,7 @@ const ResumeWebsite = () => {
             </div>
           </div>
         </div>
-        
+
         <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce text-slate-600 cursor-pointer" onClick={() => scrollToSection('about')}>
           <ChevronDown size={24} />
         </div>
@@ -364,17 +376,17 @@ const ResumeWebsite = () => {
         <div className="container mx-auto px-6">
           <div className="flex flex-col md:flex-row gap-16 items-center">
             <div className="md:w-1/2 relative">
-               <div className="absolute -inset-4 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-xl opacity-20 blur-xl"></div>
-               <div className="relative bg-[#111] p-8 rounded-xl border border-white/10">
-                 <h3 className="text-2xl font-bold text-white mb-4">Tech Stack</h3>
-                 <div className="flex flex-wrap gap-2">
-                    {skills.flatMap(s => s.items).map((skill, i) => (
-                      <span key={i} className="px-3 py-1.5 bg-white/5 border border-white/10 rounded text-sm text-slate-300 hover:text-cyan-400 hover:border-cyan-400/50 transition-colors cursor-default">
-                        {skill}
-                      </span>
-                    ))}
-                 </div>
-               </div>
+              <div className="absolute -inset-4 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-xl opacity-20 blur-xl"></div>
+              <div className="relative bg-[#111] p-8 rounded-xl border border-white/10">
+                <h3 className="text-2xl font-bold text-white mb-4">Tech Stack</h3>
+                <div className="flex flex-wrap gap-2">
+                  {skills.flatMap(s => s.items).map((skill, i) => (
+                    <span key={i} className="px-3 py-1.5 bg-white/5 border border-white/10 rounded text-sm text-slate-300 hover:text-cyan-400 hover:border-cyan-400/50 transition-colors cursor-default">
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              </div>
             </div>
             <div className="md:w-1/2 space-y-6">
               <div className="flex items-center gap-2 text-cyan-400 font-mono text-sm tracking-wider uppercase">
@@ -385,14 +397,14 @@ const ResumeWebsite = () => {
                 {personalInfo.bio}
               </p>
               <div className="grid grid-cols-2 gap-6 pt-4">
-                 <div>
-                    <h4 className="text-3xl font-bold text-white">1M+</h4>
-                    <p className="text-sm text-slate-500 mt-1">Ads Indexed</p>
-                 </div>
-                 <div>
-                    <h4 className="text-3xl font-bold text-white">30%</h4>
-                    <p className="text-sm text-slate-500 mt-1">Performance Boost</p>
-                 </div>
+                <div>
+                  <h4 className="text-3xl font-bold text-white">1M+</h4>
+                  <p className="text-sm text-slate-500 mt-1">Ads Indexed</p>
+                </div>
+                <div>
+                  <h4 className="text-3xl font-bold text-white">30%</h4>
+                  <p className="text-sm text-slate-500 mt-1">Performance Boost</p>
+                </div>
               </div>
             </div>
           </div>
@@ -406,7 +418,7 @@ const ResumeWebsite = () => {
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">What I Do</h2>
             <p className="text-slate-400 max-w-2xl mx-auto">I combine engineering principles with creative design to deliver robust applications.</p>
           </div>
-          
+
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {services.map((service, index) => (
               <div key={index} className="group p-6 bg-white/[0.02] border border-white/5 rounded-2xl hover:bg-white/[0.05] hover:border-cyan-500/30 transition-all duration-300">
@@ -433,7 +445,7 @@ const ResumeWebsite = () => {
             {experiences.map((exp, index) => (
               <div key={index} className="relative group">
                 <div className="absolute -left-[41px] md:-left-[57px] top-1.5 w-5 h-5 rounded-full bg-[#080808] border-2 border-cyan-500/50 group-hover:border-cyan-400 group-hover:scale-125 transition-all"></div>
-                
+
                 <div className="flex flex-col md:flex-row md:items-center justify-between mb-4">
                   <div>
                     <h3 className="text-2xl font-bold text-white">{exp.role}</h3>
@@ -443,9 +455,9 @@ const ResumeWebsite = () => {
                     {exp.period}
                   </span>
                 </div>
-                
+
                 <p className="text-slate-300 mb-4 text-lg">{exp.description}</p>
-                
+
                 <ul className="space-y-2">
                   {exp.achievements.map((item, i) => (
                     <li key={i} className="text-slate-400 text-sm flex items-start gap-3">
@@ -531,7 +543,7 @@ const ResumeWebsite = () => {
               <p className="text-slate-400 text-lg mb-12">
                 I'm currently looking for new opportunities. Whether you have a question or just want to say hi, my inbox is always open.
               </p>
-              
+
               <div className="space-y-6">
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center text-cyan-400">
@@ -544,7 +556,7 @@ const ResumeWebsite = () => {
                     </a>
                   </div>
                 </div>
-                
+
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center text-cyan-400">
                     <Phone size={20} />
@@ -556,7 +568,7 @@ const ResumeWebsite = () => {
                     </a>
                   </div>
                 </div>
-                
+
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 bg-white/5 rounded-full flex items-center justify-center text-cyan-400">
                     <MapPin size={20} />
@@ -575,53 +587,53 @@ const ResumeWebsite = () => {
                 <div className="grid grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <label className="text-xs text-slate-500 uppercase font-bold">Name</label>
-                    <input 
-                      type="text" 
+                    <input
+                      type="text"
                       name="name"
                       value={formData.name}
                       onChange={handleInputChange}
                       required
-                      className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-500/50 focus:bg-white/[0.07] transition-all placeholder:text-slate-600" 
-                      placeholder="John Doe" 
+                      className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-500/50 focus:bg-white/[0.07] transition-all placeholder:text-slate-600"
+                      placeholder="John Doe"
                     />
                   </div>
                   <div className="space-y-2">
                     <label className="text-xs text-slate-500 uppercase font-bold">Email</label>
-                    <input 
-                      type="email" 
+                    <input
+                      type="email"
                       name="email"
                       value={formData.email}
                       onChange={handleInputChange}
                       required
-                      className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-500/50 focus:bg-white/[0.07] transition-all placeholder:text-slate-600" 
-                      placeholder="john@example.com" 
+                      className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-500/50 focus:bg-white/[0.07] transition-all placeholder:text-slate-600"
+                      placeholder="john@example.com"
                     />
                   </div>
                 </div>
                 <div className="space-y-2">
                   <label className="text-xs text-slate-500 uppercase font-bold">Subject</label>
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     name="subject"
                     value={formData.subject}
                     onChange={handleInputChange}
-                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-500/50 focus:bg-white/[0.07] transition-all placeholder:text-slate-600" 
-                    placeholder="Project Inquiry" 
+                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-500/50 focus:bg-white/[0.07] transition-all placeholder:text-slate-600"
+                    placeholder="Project Inquiry"
                   />
                 </div>
                 <div className="space-y-2">
                   <label className="text-xs text-slate-500 uppercase font-bold">Message</label>
-                  <textarea 
-                    rows="4" 
+                  <textarea
+                    rows="4"
                     name="message"
                     value={formData.message}
                     onChange={handleInputChange}
                     required
-                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-500/50 focus:bg-white/[0.07] transition-all placeholder:text-slate-600 resize-none" 
+                    className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-500/50 focus:bg-white/[0.07] transition-all placeholder:text-slate-600 resize-none"
                     placeholder="Tell me about your project..."
                   ></textarea>
                 </div>
-                <button 
+                <button
                   type="submit"
                   disabled={isSubmitting}
                   className="w-full bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-bold py-4 rounded-xl hover:shadow-[0_0_20px_rgba(8,145,178,0.4)] transition-all transform hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
