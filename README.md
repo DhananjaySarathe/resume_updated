@@ -1,4 +1,4 @@
-# Resume Website - Next.js
+# Resume Website - Next.js 
 
 A modern, responsive resume website built with Next.js, React, and Tailwind CSS.
 
