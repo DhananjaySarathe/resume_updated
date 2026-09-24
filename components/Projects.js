@@ -1,79 +1,69 @@
-import { ArrowUpRight, ExternalLink, Terminal } from 'lucide-react';
-import { profile, projects } from '@/lib/data';
-import { accents } from '@/lib/accents';
-import SectionHeading from './SectionHeading';
+import { ArrowUpRight, FolderGit2 } from 'lucide-react';
+import { accents, projects } from '@/lib/data';
 import ProjectNotes from './ProjectNotes';
+import SectionHeader from './SectionHeader';
+import { icons } from './icons';
 
 export default function Projects() {
   return (
-    <section id="projects" className="relative z-10 w-full py-24">
-      <div className="mx-auto max-w-[1240px] px-4 md:px-8">
-        <div className="mb-14 flex flex-col justify-between gap-4 md:flex-row md:items-end" data-reveal>
-          <SectionHeading
-            icon={Terminal}
-            label="[06 // SELECTED BUILDS]"
-            title="Featured Projects"
-            description="Some things I've built from conception to launch."
-          />
-          <a
-            href={profile.socials.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 self-start rounded border border-white/15 bg-white/5 px-4 py-2 font-mono text-xs transition-all hover:border-cyber-lime hover:text-cyber-lime md:self-auto"
-          >
-            <span>View GitHub Archive</span>
-            <ExternalLink size={15} />
-          </a>
-        </div>
+    <section id="projects" className="mx-auto w-full max-w-[1440px] px-margin-sm py-20 md:px-margin lg:px-margin-lg">
+      <SectionHeader
+        icon={FolderGit2}
+        eyebrow="Side projects"
+        title="Things I built on my own"
+        note="Built outside work. All three are live, so you can try them."
+      />
 
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-          {projects.map((project, i) => {
-            const a = accents[project.accent];
-            return (
-              <article
-                key={project.title}
-                data-reveal
-                style={{ '--reveal-delay': `${i * 110}ms` }}
-                className={`spotlight group flex flex-col justify-between rounded-lg border border-white/10 bg-black/50 p-6 shadow-xl transition-all duration-300 hover:-translate-y-1.5 sm:p-7 ${a.borderStrong}`}
-              >
-                <div>
-                  <div className="mb-4 flex items-center justify-between">
-                    <span
-                      className={`rounded border border-white/10 bg-white/5 px-2.5 py-1 font-mono text-[11px] uppercase tracking-wider ${a.text}`}
-                    >
-                      {project.category}
-                    </span>
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+        {projects.map((p, i) => {
+          const Icon = icons[p.icon];
+          const a = accents[p.accent];
+          return (
+            <article
+              key={p.title}
+              data-reveal
+              style={{ '--reveal-delay': `${i * 110}ms`, '--glow': a.glow }}
+              className="glass glass-hover spotlight group flex flex-col justify-between rounded-xl p-7 hover:-translate-y-1"
+            >
+              <div>
+                <div className="mb-6 flex items-center justify-between">
+                  <span className={`rounded-lg bg-surface-container p-3 ${a.text}`}>
+                    <Icon size={24} />
+                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className={`rounded bg-surface-container px-2 py-0.5 text-label-sm uppercase ${a.text}`}>{p.badge}</span>
                     <a
-                      href={project.url}
+                      href={p.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      aria-label={`Open ${project.title}`}
-                      className={`p-1 text-zinc-400 transition-colors ${a.hoverText}`}
+                      aria-label={`Open ${p.title}`}
+                      className={`rounded-lg p-2 text-on-surface-variant transition-all hover:bg-surface-container ${a.groupText}`}
                     >
-                      <ArrowUpRight size={20} />
+                      <ArrowUpRight size={19} className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                     </a>
                   </div>
-                  <h3 className={`mb-3 font-headline text-2xl font-bold text-white transition-colors ${a.groupText}`}>
-                    <a href={project.url} target="_blank" rel="noopener noreferrer">
-                      {project.title}
-                    </a>
-                  </h3>
-                  <p className="mb-6 text-sm leading-relaxed text-zinc-300">{project.desc}</p>
                 </div>
-                <div className="mt-auto">
-                  <div className="flex flex-wrap gap-2 border-t border-white/10 pt-4 font-mono text-xs text-zinc-400">
-                    {project.tags.map((tag) => (
-                      <span key={tag} className="rounded border border-white/5 bg-zinc-900 px-2 py-0.5">
-                        #{tag}
-                      </span>
-                    ))}
-                  </div>
-                  <ProjectNotes notes={project.notes} accentText={a.text} />
+                <h3 className={`mb-2 font-display text-headline-md text-on-surface transition-colors duration-300 ${a.groupText}`}>
+                  <a href={p.url} target="_blank" rel="noopener noreferrer">
+                    {p.title}
+                  </a>
+                </h3>
+                <p className="mb-4 text-body-sm font-medium text-on-surface-variant">{p.category}</p>
+                <p className="mb-6 text-body-sm text-on-surface-variant">{p.desc}</p>
+              </div>
+              <div>
+                <div className="flex flex-wrap gap-1.5">
+                  {p.tags.map((t) => (
+                    <span key={t} className="rounded bg-surface-container px-2 py-1 text-label-sm text-on-surface-variant">
+                      {t}
+                    </span>
+                  ))}
                 </div>
-              </article>
-            );
-          })}
-        </div>
+                <ProjectNotes notes={p.notes} accentText={a.text} />
+              </div>
+            </article>
+          );
+        })}
       </div>
     </section>
   );

@@ -1,50 +1,52 @@
-import { BrainCircuit, Layers, LayoutDashboard, ScanSearch, Server } from 'lucide-react';
-import { disciplines } from '@/lib/data';
-import { accents } from '@/lib/accents';
-import SectionHeading from './SectionHeading';
-
-const icons = { layout: LayoutDashboard, brain: BrainCircuit, server: Server, scan: ScanSearch };
+import { Terminal } from 'lucide-react';
+import { accents, disciplines } from '@/lib/data';
+import SectionHeader from './SectionHeader';
+import { icons } from './icons';
 
 export default function Disciplines() {
   return (
-    <section id="disciplines" className="relative z-10 w-full py-24">
-      <div className="mx-auto max-w-[1240px] px-4 md:px-8">
-        <SectionHeading
-          className="mb-14"
-          data-reveal
-          icon={Layers}
-          label="[03 // WHAT I DO]"
-          title="Core Engineering Disciplines"
-          description="I combine rigorous engineering principles with human-centric design to deliver robust, low-maintenance production applications."
-        />
+    <section id="disciplines" className="mx-auto w-full max-w-[1440px] px-margin-sm py-16 md:px-margin lg:px-margin-lg">
+      <SectionHeader
+        icon={Terminal}
+        tone="text-secondary"
+        eyebrow="What I work on"
+        title="Where my time goes"
+        note="Mostly frontend architecture, with a lot of AI and scraping work mixed in."
+      />
 
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4">
-          {disciplines.map((item, i) => {
-            const Icon = icons[item.icon];
-            const a = accents[item.accent];
-            return (
-              <div
-                key={item.title}
-                data-reveal
-                style={{ '--reveal-delay': `${i * 90}ms` }}
-                className={`spotlight group flex flex-col justify-between rounded-lg border border-white/10 bg-black/40 p-6 shadow-lg transition-all duration-300 hover:-translate-y-1 ${a.border}`}
-              >
-                <div>
-                  <div
-                    className={`mb-6 flex h-12 w-12 items-center justify-center rounded border border-white/10 bg-white/5 transition-colors ${a.iconHover}`}
-                  >
-                    <Icon size={24} className={a.text} />
-                  </div>
-                  <h3 className={`mb-2 font-headline text-xl font-bold text-white transition-colors ${a.groupText}`}>
-                    {item.title}
-                  </h3>
-                  <p className="text-sm leading-relaxed text-zinc-400">{item.desc}</p>
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+        {disciplines.map((d, i) => {
+          const Icon = icons[d.icon];
+          const a = accents[d.accent];
+          return (
+            <article
+              key={d.title}
+              data-reveal
+              style={{ '--reveal-delay': `${(i % 2) * 110}ms`, '--glow': a.glow }}
+              className="glass glass-hover spotlight group rounded-xl p-8"
+            >
+              <div className="mb-6 flex items-start justify-between">
+                <div className={`rounded-lg bg-surface-container p-3 transition-transform duration-500 group-hover:scale-110 ${a.text}`}>
+                  <Icon size={26} />
                 </div>
-                <div className={`mt-6 border-t border-white/10 pt-4 font-mono text-xs ${a.text}`}>{item.stack}</div>
+                <span className="rounded bg-surface-container-high px-2.5 py-1 text-label-sm uppercase text-on-surface-variant">
+                  {d.badge}
+                </span>
               </div>
-            );
-          })}
-        </div>
+              <h3 className={`mb-3 font-display text-headline-md text-on-surface transition-colors duration-300 ${a.groupText}`}>
+                {d.title}
+              </h3>
+              <p className="mb-6 text-body-md text-on-surface-variant">{d.body}</p>
+              <div className="flex flex-wrap gap-2">
+                {d.chips.map((c) => (
+                  <span key={c} className="rounded bg-surface-container px-2.5 py-1 text-label-sm text-on-surface">
+                    {c}
+                  </span>
+                ))}
+              </div>
+            </article>
+          );
+        })}
       </div>
     </section>
   );

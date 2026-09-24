@@ -3,12 +3,12 @@
 import { useEffect, useState } from 'react';
 import { CheckCheck, Copy, Mail } from 'lucide-react';
 
-export function CopyEmailRow({ email }) {
+export function CopyEmailPill({ email }) {
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     if (!copied) return;
-    const id = setTimeout(() => setCopied(false), 2500);
+    const id = setTimeout(() => setCopied(false), 2200);
     return () => clearTimeout(id);
   }, [copied]);
 
@@ -26,29 +26,25 @@ export function CopyEmailRow({ email }) {
     <button
       type="button"
       onClick={copy}
-      className={`group flex w-full items-center justify-between rounded-lg border bg-zinc-950/80 p-4 text-left transition-all ${
-        copied ? 'border-cyber-lime' : 'border-white/10 hover:border-cyber-lime'
+      aria-label={`Copy email address ${email}`}
+      className={`group flex min-w-0 flex-1 items-center justify-between gap-2 rounded-xl px-3.5 py-4 text-left shadow-inner sm:gap-3 sm:px-5 backdrop-blur-md transition-all duration-300 ${
+        copied ? 'bg-primary-container/15 ring-1 ring-primary/50' : 'bg-surface-container-high/90 hover:bg-surface-bright'
       }`}
     >
-      <div className="flex min-w-0 items-center gap-3.5">
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded border border-white/10 bg-white/5 text-cyber-lime transition-transform group-hover:scale-105">
-          <Mail size={20} />
-        </div>
-        <div className="min-w-0">
-          <span className="block font-mono text-[10px] uppercase tracking-widest text-zinc-500" aria-live="polite">
-            Direct Inbox ·{' '}
-            <span className={copied ? 'text-cyber-lime' : 'text-zinc-400 group-hover:text-cyber-lime'}>
-              {copied ? 'Copied!' : 'Click to copy'}
-            </span>
-          </span>
-          <span className="block truncate font-mono text-xs font-medium text-white group-hover:text-cyber-lime sm:text-sm">
-            {email}
-          </span>
-        </div>
-      </div>
-      <div className="shrink-0 pl-2 text-zinc-400 transition-colors group-hover:text-cyber-lime">
-        {copied ? <CheckCheck size={16} className="text-cyber-lime" /> : <Copy size={16} />}
-      </div>
+      <span className="flex min-w-0 items-center gap-2 sm:gap-3">
+        {copied ? <CheckCheck size={19} className="shrink-0 text-primary" /> : <Mail size={19} className="shrink-0 text-primary" />}
+        <span className="truncate text-[0.875rem] text-on-surface sm:text-label-lg sm:tracking-wide">{email}</span>
+      </span>
+      <span
+        aria-hidden="true"
+        className={`hidden shrink-0 text-label-sm uppercase tracking-widest sm:inline ${copied ? 'text-secondary' : 'text-primary group-hover:underline'}`}
+      >
+        {copied ? 'Copied!' : 'Copy email'}
+      </span>
+      {!copied && <Copy size={17} aria-hidden="true" className="shrink-0 text-primary sm:hidden" />}
+      <span className="sr-only" aria-live="polite">
+        {copied ? 'Email address copied to clipboard' : ''}
+      </span>
     </button>
   );
 }
@@ -58,19 +54,23 @@ const istFormat = new Intl.DateTimeFormat('en-GB', {
   hour12: false,
   hour: '2-digit',
   minute: '2-digit',
-  second: '2-digit',
 });
 
-export function IstClock({ className = '' }) {
+export function IstClock({ className = '', suffix = ' IST' }) {
   // Starts empty so the server-rendered HTML matches the first client render.
   const [time, setTime] = useState(null);
 
   useEffect(() => {
     const tick = () => setTime(istFormat.format(new Date()));
     tick();
-    const id = setInterval(tick, 1000);
+    const id = setInterval(tick, 15000);
     return () => clearInterval(id);
   }, []);
 
-  return <span className={`tabular-nums ${className}`}>{time ?? '--:--:--'} IST</span>;
+  return (
+    <span className={`tabular-nums ${className}`}>
+      {time ?? '--:--'}
+      {suffix}
+    </span>
+  );
 }

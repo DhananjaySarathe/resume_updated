@@ -1,20 +1,28 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { ArrowUpRight, FileText, Github, Linkedin, Menu, Terminal, X } from 'lucide-react';
-import { navLinks, profile, topTicker } from '@/lib/data';
-import Marquee from './Marquee';
-
-const socialLinks = [
-  { href: profile.socials.github, label: 'GitHub', icon: Github },
-  { href: profile.socials.linkedin, label: 'LinkedIn', icon: Linkedin },
-  { href: profile.socials.leetcode, label: 'LeetCode', icon: Terminal },
-];
+import Image from 'next/image';
+import { Menu, X } from 'lucide-react';
+import { navLinks, profile } from '@/lib/data';
 
 export default function Header() {
   const [active, setActive] = useState('overview');
   const [menuOpen, setMenuOpen] = useState(false);
   const progressRef = useRef(null);
+
+  // Scroll-spy: a thin band near the top of the viewport decides the current section.
+  useEffect(() => {
+    const sections = navLinks.map(({ id }) => document.getElementById(id)).filter(Boolean);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries.filter((e) => e.isIntersecting);
+        if (visible.length) setActive(visible[0].target.id);
+      },
+      { rootMargin: '-20% 0px -75% 0px' }
+    );
+    sections.forEach((s) => observer.observe(s));
+    return () => observer.disconnect();
+  }, []);
 
   // Scroll progress is written straight to the DOM so scrolling never re-renders React.
   useEffect(() => {
@@ -22,8 +30,7 @@ export default function Header() {
     const update = () => {
       frame = 0;
       const max = document.documentElement.scrollHeight - window.innerHeight;
-      const progress = max > 0 ? window.scrollY / max : 0;
-      if (progressRef.current) progressRef.current.style.transform = `scaleX(${progress})`;
+      if (progressRef.current) progressRef.current.style.transform = `scaleX(${max > 0 ? window.scrollY / max : 0})`;
     };
     const onScroll = () => {
       if (!frame) frame = requestAnimationFrame(update);
@@ -38,143 +45,110 @@ export default function Header() {
     };
   }, []);
 
-  useEffect(() => {
-    const sections = navLinks.map(({ id }) => document.getElementById(id)).filter(Boolean);
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries.filter((e) => e.isIntersecting);
-        if (visible.length) setActive(visible[0].target.id);
-      },
-      // A thin band near the top of the viewport decides which section is "current".
-      { rootMargin: '-20% 0px -75% 0px' }
-    );
-    sections.forEach((s) => observer.observe(s));
-    return () => observer.disconnect();
-  }, []);
-
   return (
-    <>
-      <header className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-ink/80 backdrop-blur-xl">
-        <div
-          ref={progressRef}
-          aria-hidden="true"
-          className="absolute inset-x-0 -bottom-px h-px origin-left scale-x-0 bg-gradient-to-r from-cyber-lime via-cyber-lime to-cyber-cyan shadow-[0_0_8px_rgba(204,255,0,0.7)]"
-        />
-        <div className="mx-auto flex h-16 max-w-[1240px] items-center justify-between gap-4 px-4 md:px-8">
-          <a href="#overview" className="group flex items-center gap-3">
-            <div className="relative flex h-8 w-8 items-center justify-center rounded-sm border border-white/20 bg-black font-mono font-bold text-cyber-lime transition-all group-hover:border-cyber-lime group-hover:shadow-[0_0_12px_rgba(204,255,0,0.5)]">
-              <span>{profile.initials}</span>
-              <span className="absolute -right-1 -top-1 h-2 w-2 animate-ping rounded-full bg-cyber-lime" />
-            </div>
-            <div className="flex flex-col">
-              <span className="font-headline text-sm font-bold leading-none tracking-tight text-white transition-colors group-hover:text-cyber-lime sm:text-base">
-                {profile.name}
-              </span>
-              <span className="mt-1 flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-wider text-zinc-400">
-                <span className="h-1.5 w-1.5 rounded-full bg-cyber-lime" />
-                {profile.role}
-              </span>
-            </div>
-          </a>
+    <header className="fixed inset-x-0 top-0 z-50 bg-surface/75 shadow-[0_1px_8px_rgba(0,0,0,0.04)] backdrop-blur-xl">
+      <div
+        ref={progressRef}
+        aria-hidden="true"
+        className="absolute inset-x-0 bottom-0 h-px origin-left scale-x-0 bg-gradient-to-r from-primary via-secondary to-primary-fixed"
+      />
+      <div className="mx-auto flex h-20 max-w-[1440px] items-center justify-between gap-4 px-margin-sm md:px-margin lg:px-margin-lg">
+        <a href="#overview" className="group flex flex-col">
+          <span className="whitespace-nowrap font-display text-[1.05rem] tracking-tight text-on-surface transition-colors group-hover:text-primary sm:text-headline-sm">
+            {profile.name}
+          </span>
+          <span className="mt-0.5 flex items-center gap-1.5">
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-pill bg-primary opacity-75" />
+              <span className="relative inline-flex h-2 w-2 rounded-pill bg-primary" />
+            </span>
+            <span className="whitespace-nowrap text-label-sm uppercase tracking-widest text-on-surface-variant">
+              <span className="sm:hidden">Founding SDE</span>
+              <span className="hidden sm:inline">Founding engineer, Quickads</span>
+            </span>
+          </span>
+        </a>
 
-          <nav
-            aria-label="Primary"
-            className="hidden items-center gap-1 rounded-full border border-white/10 bg-zinc-950/80 px-3 py-1.5 font-mono text-xs text-zinc-400 shadow-inner xl:flex"
-          >
-            {navLinks.map(({ id, label }) => (
-              <a
-                key={id}
-                href={`#${id}`}
-                aria-current={active === id ? 'true' : undefined}
-                className={`rounded-full px-3 py-1 transition-all ${
-                  active === id ? 'bg-white/10 font-medium text-white' : 'hover:bg-white/5 hover:text-cyber-lime'
-                }`}
-              >
-                {label}
-              </a>
-            ))}
-          </nav>
-
-          <div className="flex items-center gap-2 font-mono text-xs sm:gap-3">
-            <div className="hidden items-center gap-1 border-r border-white/10 pr-3 sm:flex">
-              {socialLinks.map(({ href, label, icon: Icon }) => (
-                <a
-                  key={label}
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  title={label}
-                  aria-label={label}
-                  className="rounded p-2 text-zinc-400 transition-colors hover:bg-white/5 hover:text-cyber-lime"
-                >
-                  <Icon size={17} />
-                </a>
-              ))}
-            </div>
+        <nav aria-label="Primary" className="hidden items-center gap-6 xl:flex">
+          {navLinks.map(({ id, label }) => (
             <a
-              href={profile.resume}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Resume"
-              className="group inline-flex items-center gap-1.5 rounded-sm border border-white/20 bg-white/5 px-2.5 py-1.5 font-medium transition-all hover:border-cyber-lime hover:bg-cyber-lime hover:text-black sm:px-3"
+              key={id}
+              href={`#${id}`}
+              aria-current={active === id ? 'true' : undefined}
+              className={`relative py-1 text-label-md uppercase tracking-wider transition-colors ${
+                active === id ? 'text-primary' : 'text-on-surface-variant hover:text-on-surface'
+              }`}
             >
-              <FileText size={15} className="text-cyber-lime group-hover:text-black" />
-              <span className="hidden sm:inline">Resume</span>
-              <ArrowUpRight size={13} className="hidden sm:block" />
-            </a>
-            <button
-              type="button"
-              onClick={() => setMenuOpen((o) => !o)}
-              aria-expanded={menuOpen}
-              aria-controls="mobile-nav"
-              aria-label={menuOpen ? 'Close menu' : 'Open menu'}
-              className="rounded p-2 text-zinc-300 transition-colors hover:bg-white/5 hover:text-cyber-lime xl:hidden"
-            >
-              {menuOpen ? <X size={20} /> : <Menu size={20} />}
-            </button>
-          </div>
-        </div>
-
-        {menuOpen && (
-          <nav
-            id="mobile-nav"
-            aria-label="Mobile"
-            className="border-t border-white/10 bg-ink/95 px-4 py-3 font-mono text-sm xl:hidden"
-          >
-            {navLinks.map(({ id, label }) => (
-              <a
-                key={id}
-                href={`#${id}`}
-                onClick={() => setMenuOpen(false)}
-                className={`flex items-center justify-between border-b border-white/5 py-3 last:border-0 ${
-                  active === id ? 'text-cyber-lime' : 'text-zinc-300'
+              {label}
+              <span
+                className={`absolute -bottom-0.5 left-0 h-px w-full origin-left bg-primary transition-transform duration-300 ${
+                  active === id ? 'scale-x-100' : 'scale-x-0'
                 }`}
-              >
-                {label}
-                <span className="text-zinc-600">›</span>
-              </a>
-            ))}
-            <div className="flex gap-2 pt-3 sm:hidden">
-              {socialLinks.map(({ href, label, icon: Icon }) => (
-                <a
-                  key={label}
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 rounded border border-white/10 px-3 py-1.5 text-xs text-zinc-300"
-                >
-                  <Icon size={14} /> {label}
-                </a>
-              ))}
-            </div>
-          </nav>
-        )}
-      </header>
+              />
+            </a>
+          ))}
+        </nav>
 
-      {/* Live ticker directly under the fixed nav */}
-      <div className="relative z-20 mt-16 w-full overflow-hidden border-b border-white/10 bg-black/60 py-1.5 font-mono text-[11px] uppercase tracking-widest text-zinc-400 backdrop-blur-md">
-        <Marquee items={topTicker} />
+        <div className="flex items-center gap-2 sm:gap-3">
+          <a
+            href={profile.resume}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden items-center justify-center rounded-lg bg-surface-container-high px-4 py-2 text-label-md uppercase tracking-wider text-on-surface transition-all hover:bg-surface-bright sm:inline-flex"
+          >
+            Resume
+          </a>
+          <a
+            href="#connect"
+            className="inline-flex items-center justify-center whitespace-nowrap rounded-lg bg-primary-container px-3 py-2 text-label-md sm:px-4 uppercase tracking-wider text-on-primary shadow-[0_0_24px_rgba(6,182,212,0.35)] transition-all hover:bg-primary hover:shadow-[0_0_32px_rgba(6,182,212,0.55)]"
+          >
+            Book a call
+          </a>
+          <a
+            href="#overview"
+            aria-label="Back to top"
+            className="relative hidden h-8 w-8 shrink-0 overflow-hidden rounded-full ring-1 ring-primary/40 sm:block"
+          >
+            <Image src="/portrait.jpg" alt="" fill sizes="32px" className="object-cover object-top" />
+          </a>
+          <button
+            type="button"
+            onClick={() => setMenuOpen((o) => !o)}
+            aria-expanded={menuOpen}
+            aria-controls="mobile-nav"
+            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+            className="rounded-lg p-2 text-on-surface-variant transition-colors hover:bg-surface-container hover:text-on-surface xl:hidden"
+          >
+            {menuOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
+        </div>
       </div>
-    </>
+
+      {menuOpen && (
+        <nav id="mobile-nav" aria-label="Mobile" className="bg-surface/95 px-margin-sm pb-4 backdrop-blur-xl md:px-margin xl:hidden">
+          {navLinks.map(({ id, label }) => (
+            <a
+              key={id}
+              href={`#${id}`}
+              onClick={() => setMenuOpen(false)}
+              className={`flex items-center justify-between border-b border-white/5 py-3 text-label-lg uppercase tracking-wider last:border-0 ${
+                active === id ? 'text-primary' : 'text-on-surface-variant'
+              }`}
+            >
+              {label}
+              <span className="text-outline">›</span>
+            </a>
+          ))}
+          <a
+            href={profile.resume}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-3 flex items-center justify-center rounded-lg bg-surface-container-high py-3 text-label-md uppercase tracking-wider text-on-surface sm:hidden"
+          >
+            Resume
+          </a>
+        </nav>
+      )}
+    </header>
   );
 }

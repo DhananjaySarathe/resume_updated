@@ -1,0 +1,36 @@
+import {
+  Bot,
+  BrainCircuit,
+  Calculator,
+  Code2,
+  Gauge,
+  LayoutDashboard,
+  Layers,
+  Library,
+  Radar,
+  Rocket,
+  Search,
+  Server,
+  Terminal,
+  Wallet,
+  Wrench,
+} from 'lucide-react';
+
+// Data files reference icons by name so they stay plain, serializable objects.
+export const icons = {
+  bot: Bot,
+  brain: BrainCircuit,
+  calculator: Calculator,
+  code: Code2,
+  gauge: Gauge,
+  layers: Layers,
+  layout: LayoutDashboard,
+  library: Library,
+  radar: Radar,
+  rocket: Rocket,
+  search: Search,
+  server: Server,
+  terminal: Terminal,
+  wallet: Wallet,
+  wrench: Wrench,
+};

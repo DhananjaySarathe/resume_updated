@@ -1,23 +1,29 @@
-import { Syne } from 'next/font/google';
-import { GeistSans } from 'geist/font/sans';
+import { Bodoni_Moda, Hanken_Grotesk } from 'next/font/google';
 import { GeistMono } from 'geist/font/mono';
 import './globals.css';
 
-const syne = Syne({
+const bodoni = Bodoni_Moda({
   subsets: ['latin'],
-  weight: ['500', '600', '700', '800'],
-  variable: '--font-syne',
+  axes: ['opsz'],
+  style: ['normal', 'italic'],
+  variable: '--font-bodoni',
+  display: 'swap',
+});
+
+const hanken = Hanken_Grotesk({
+  subsets: ['latin'],
+  variable: '--font-hanken',
   display: 'swap',
 });
 
 export const metadata = {
-  title: 'Dhananjay Sarathe | Founding SDE & Systems Architect',
+  title: 'Dhananjay Sarathe | Founding SDE @ Quickads',
   description:
-    'Founding Member (SDE) at Quickads. Full Stack Engineer building scalable, AI-driven ecosystems with Next.js, AI vision workflows and high-throughput scraping pipelines.',
+    'Founding engineer at Quickads. I build the product end to end: the Next.js frontend, the AI features, and the scrapers that pull in ads from Meta.',
 };
 
 export const viewport = {
-  themeColor: '#08080b',
+  themeColor: '#121317',
 };
 
 // Runs before first paint: enables reveal styles, and backs them out if hydration never arrives.
@@ -25,14 +31,11 @@ const revealBootstrap = `document.documentElement.classList.add('js');setTimeout
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${syne.variable} ${GeistSans.variable} ${GeistMono.variable}`} suppressHydrationWarning>
+    <html lang="en" className={`${bodoni.variable} ${hanken.variable} ${GeistMono.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: revealBootstrap }} />
       </head>
-      <body className="overflow-x-hidden">
-        {children}
-        <div className="grain" aria-hidden="true" />
-      </body>
+      <body className="overflow-x-hidden">{children}</body>
     </html>
   );
 }

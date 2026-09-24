@@ -1,48 +1,41 @@
-import { Cpu } from 'lucide-react';
-import { stack } from '@/lib/data';
-import { accents } from '@/lib/accents';
-import SectionHeading from './SectionHeading';
+import { Layers } from 'lucide-react';
+import { accents, stack } from '@/lib/data';
+import SectionHeader from './SectionHeader';
+import { icons } from './icons';
 
 export default function Stack() {
   return (
-    <section id="stack" className="relative z-10 w-full border-y border-white/10 bg-ink-raised py-24">
-      <div className="mx-auto max-w-[1240px] px-4 md:px-8">
-        <SectionHeading
-          className="mb-14"
-          data-reveal
-          icon={Cpu}
-          label="[07 // FOUNDATIONAL TOOLING]"
-          title="Tech Stack & Specializations"
-        />
+    <section id="stack" className="mx-auto w-full max-w-[1440px] px-margin-sm py-16 md:px-margin lg:px-margin-lg">
+      <SectionHeader icon={Layers} eyebrow="Stack" title="What I build with" />
 
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-          {stack.map((group, index) => {
-            const a = accents[group.accent];
-            return (
-              <div
-                key={group.category}
-                data-reveal
-                style={{ '--reveal-delay': `${index * 90}ms` }}
-                className={`spotlight rounded-lg border border-white/10 bg-black/40 p-6 backdrop-blur-md transition-colors ${a.borderSoft}`}
-              >
-                <div className="mb-4 flex items-center justify-between font-mono text-xs uppercase tracking-wider text-zinc-400">
-                  <span>{group.category}</span>
-                  <span className={`font-bold ${a.text}`}>{String(index + 1).padStart(2, '0')}</span>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  {group.items.map((item) => (
-                    <span
-                      key={item}
-                      className={`rounded border border-white/10 bg-white/5 px-3 py-1.5 font-mono text-xs text-white transition-colors ${a.chipHover}`}
-                    >
-                      {item}
-                    </span>
-                  ))}
-                </div>
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+        {stack.map((group, i) => {
+          const Icon = icons[group.icon];
+          const a = accents[group.accent];
+          return (
+            <div
+              key={group.title}
+              data-reveal
+              style={{ '--reveal-delay': `${i * 90}ms`, '--glow': a.glow }}
+              className="glass glass-hover spotlight rounded-xl p-6"
+            >
+              <div className={`mb-4 flex items-center gap-2 ${a.text}`}>
+                <Icon size={19} />
+                <h3 className="font-display text-headline-sm text-on-surface">{group.title}</h3>
               </div>
-            );
-          })}
-        </div>
+              <div className="flex flex-wrap gap-2">
+                {group.items.map((item) => (
+                  <span
+                    key={item}
+                    className="rounded bg-surface-container px-3 py-1.5 text-label-md text-on-surface transition-colors duration-300 hover:bg-surface-container-high"
+                  >
+                    {item}
+                  </span>
+                ))}
+              </div>
+            </div>
+          );
+        })}
       </div>
     </section>
   );

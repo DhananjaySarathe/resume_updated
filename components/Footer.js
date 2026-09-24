@@ -1,36 +1,75 @@
-import { ArrowUp, Mail } from 'lucide-react';
+import { ArrowUp, Briefcase, Clock, Code2, Github, Linkedin, MapPin } from 'lucide-react';
 import { profile } from '@/lib/data';
+import { IstClock } from './ContactWidgets';
+
+const links = [
+  { label: 'GitHub', href: profile.socials.github, icon: Github },
+  { label: 'LinkedIn', href: profile.socials.linkedin, icon: Linkedin },
+  { label: 'LeetCode', href: profile.socials.leetcode, icon: Code2 },
+];
 
 export default function Footer() {
   return (
-    <footer className="relative z-10 w-full border-t border-white/10 bg-black py-10">
-      <div className="mx-auto flex max-w-[1240px] flex-col items-center justify-between gap-6 px-4 md:flex-row md:px-8">
-        <div className="flex flex-col items-center gap-1 md:items-start">
-          <div className="flex flex-wrap items-center justify-center gap-2 font-mono text-sm">
-            <span className="font-bold text-white">{profile.name}</span>
-            <span className="text-zinc-600">/</span>
-            <span className="text-cyber-lime">{profile.tagline}</span>
+    <footer className="relative w-full bg-surface-container-lowest/90 backdrop-blur-xl">
+      <div className="mx-auto max-w-[1440px] px-margin-sm py-10 md:px-margin lg:px-margin-lg">
+        <div className="flex flex-col items-start justify-between gap-6 pb-6 lg:flex-row lg:items-center">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <span className="font-display text-headline-sm text-on-surface">{profile.name}</span>
+              <span className="rounded bg-surface-container px-1.5 py-0.5 text-label-sm text-primary">FOUNDING SDE</span>
+            </div>
+            <p className="max-w-md text-body-sm text-on-surface-variant">
+              Founding engineer at Quickads. I build AI products for people who make ads.
+            </p>
           </div>
-          <p className="font-mono text-xs text-zinc-500">
-            © {new Date().getFullYear()} {profile.name}. Engineered with high craft and precision.
-          </p>
+          <div className="grid grid-cols-2 gap-6 sm:grid-cols-3">
+            <div className="space-y-1">
+              <span className="text-label-sm uppercase tracking-widest text-on-surface-variant">Local time</span>
+              <div className="flex items-center gap-1.5 text-label-md text-on-surface">
+                <Clock size={15} className="text-tertiary" />
+                <IstClock />
+              </div>
+            </div>
+            <div className="space-y-1">
+              <span className="text-label-sm uppercase tracking-widest text-on-surface-variant">Currently</span>
+              <div className="flex items-center gap-1.5 text-label-md text-on-surface">
+                <Briefcase size={15} className="text-primary" />
+                <span>Founding SDE, Quickads</span>
+              </div>
+            </div>
+            <div className="space-y-1">
+              <span className="text-label-sm uppercase tracking-widest text-on-surface-variant">Based in</span>
+              <div className="flex items-center gap-1.5 text-label-md text-on-surface">
+                <MapPin size={15} className="text-secondary" />
+                <span>{profile.location}</span>
+              </div>
+            </div>
+          </div>
         </div>
-        <div className="flex flex-wrap items-center justify-center gap-4 font-mono text-xs">
-          <div className="flex items-center gap-2 rounded border border-white/10 bg-zinc-900 px-3 py-1 text-zinc-300">
-            <span className="h-2 w-2 animate-pulse rounded-full bg-cyber-lime" />
-            <span>Next.js • TypeScript • Go • Distributed Systems</span>
+        <div className="flex flex-col items-center justify-between gap-4 border-t border-white/5 pt-5 md:flex-row">
+          <p className="text-body-sm text-on-surface-variant">
+            © {new Date().getFullYear()} {profile.name}. Built with Next.js.
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-6">
+            {links.map(({ label, href, icon: Icon }) => (
+              <a
+                key={label}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1 text-label-md uppercase tracking-wider text-on-surface-variant transition-colors hover:text-primary"
+              >
+                <Icon size={15} />
+                {label}
+              </a>
+            ))}
+            <a
+              href="#overview"
+              className="flex items-center gap-1 text-label-md uppercase tracking-wider text-on-surface-variant transition-colors hover:text-primary"
+            >
+              <ArrowUp size={15} /> Top
+            </a>
           </div>
-          <a href={`mailto:${profile.email}`} className="inline-flex items-center gap-1.5 text-cyber-lime hover:underline">
-            <Mail size={15} />
-            <span>Get in touch</span>
-          </a>
-          <a
-            href="#overview"
-            className="inline-flex items-center gap-1.5 rounded border border-white/10 px-2.5 py-1 text-zinc-400 transition-colors hover:border-cyber-lime hover:text-cyber-lime"
-          >
-            <ArrowUp size={14} />
-            <span>Top</span>
-          </a>
         </div>
       </div>
     </footer>
