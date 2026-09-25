@@ -17,7 +17,7 @@ export default function Hero() {
               <span className="relative inline-flex h-2.5 w-2.5 rounded-pill bg-primary" />
             </span>
             <span className="text-label-sm uppercase tracking-widest text-on-surface">
-              Open to founding engineer roles
+              Building at Quickads <span className="text-outline">·</span> Happy to talk shop
             </span>
           </div>
 

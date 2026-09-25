@@ -51,8 +51,8 @@ export default function Connect() {
             </span>
           </h2>
           <p className="mb-9 text-body-lg text-on-surface-variant">
-            I&apos;m happy to talk about founding engineer roles, 0→1 products, or an AI feature you&apos;re trying to ship.
-            Email is the fastest way to reach me.
+            I&apos;m always happy to talk about 0→1 products, an AI feature you&apos;re building, or a scraping problem
+            you&apos;re stuck on. Email is the fastest way to reach me.
           </p>
 
           <div className="mb-10 space-y-4">
