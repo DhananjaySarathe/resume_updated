@@ -1,15 +1,11 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-
-const compact = new Intl.NumberFormat('en', { notation: 'compact', maximumFractionDigits: 1 });
-
-function formatValue(n, format) {
-  return format === 'compact' ? compact.format(n) : Math.round(n).toString();
-}
+import { formatNumber } from '@/lib/format';
 
 // Server render shows the final number, so it reads correctly without JS.
-export default function CountUp({ value, prefix = '', suffix = '', format, duration = 1400, className = '' }) {
+// Screen readers get the final value once; the animated digits are hidden from them.
+export default function CountUp({ value, prefix = '', suffix = '', format, srText, duration = 1400, className = '' }) {
   const ref = useRef(null);
   const [display, setDisplay] = useState(value);
 
@@ -35,17 +31,28 @@ export default function CountUp({ value, prefix = '', suffix = '', format, durat
       { threshold: 0.6 }
     );
     observer.observe(el);
+
+    // Printing before the numbers scrolled into view would otherwise print zeros.
+    const onBeforePrint = () => {
+      cancelAnimationFrame(frame);
+      observer.disconnect();
+      setDisplay(value);
+    };
+    window.addEventListener('beforeprint', onBeforePrint);
+
     return () => {
       observer.disconnect();
       cancelAnimationFrame(frame);
+      window.removeEventListener('beforeprint', onBeforePrint);
     };
   }, [value, duration]);
 
   return (
-    <span ref={ref} className={`tabular-nums ${className}`} aria-label={`${prefix}${formatValue(value, format)}${suffix}`}>
+    <span ref={ref} className={`count-up tabular-nums ${className}`}>
+      <span className="sr-only">{srText ?? `${prefix}${formatNumber(value, format)}${suffix}`}</span>
       <span aria-hidden="true">
         {prefix}
-        {formatValue(display, format)}
+        {formatNumber(display, format)}
         {suffix}
       </span>
     </span>

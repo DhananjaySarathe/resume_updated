@@ -1,0 +1,28 @@
+{
+  "notes": [
+    {
+      "text": "Of the {total} components, {client} are client components that ship JavaScript. The other {server} render only on the server.",
+      "files": ["components"]
+    },
+    {
+      "text": "Every scroll reveal shares one IntersectionObserver. With JavaScript off nothing is hidden in the first place, and if the scripts fail to load, a fallback in the page head shows everything after three seconds.",
+      "files": ["components/Motion.js", "app/layout.js"]
+    },
+    {
+      "text": "The numbers under Impact are rendered on the server at their final value, so they read right without JavaScript. The count-up only runs once they scroll into view.",
+      "files": ["components/CountUp.js"]
+    },
+    {
+      "text": "The progress line under the header is written straight to the DOM. While you scroll, React only re-renders when you reach a new section.",
+      "files": ["components/Header.js"]
+    },
+    {
+      "text": "Before every build, Prunify checks this code for dead exports, import cycles and unused assets. Its latest result is on the Prunify card above.",
+      "files": ["scripts/prunify-self.mjs"]
+    },
+    {
+      "text": "Fonts are self-hosted through next/font, so the page makes no font requests to Google. The link preview image is drawn at build time in the same typefaces.",
+      "files": ["app/layout.js", "app/opengraph-image.js"]
+    }
+  ]
+}

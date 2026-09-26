@@ -1,36 +1,40 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import Image from 'next/image';
 import { Menu, X } from 'lucide-react';
 import { navLinks, profile } from '@/lib/data';
 
 export default function Header() {
   const [active, setActive] = useState('overview');
   const [menuOpen, setMenuOpen] = useState(false);
+  const headerRef = useRef(null);
   const progressRef = useRef(null);
+  const barRef = useRef(null);
+  const toggleRef = useRef(null);
+  const linkRefs = useRef({});
 
-  // Scroll-spy: a thin band near the top of the viewport decides the current section.
+  // One rAF-throttled scroll handler. The progress line is written straight to the DOM;
+  // React only re-renders when the current section changes. The current section is the
+  // last one whose top has passed a line 25% down the viewport.
   useEffect(() => {
-    const sections = navLinks.map(({ id }) => document.getElementById(id)).filter(Boolean);
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries.filter((e) => e.isIntersecting);
-        if (visible.length) setActive(visible[0].target.id);
-      },
-      { rootMargin: '-20% 0px -75% 0px' }
-    );
-    sections.forEach((s) => observer.observe(s));
-    return () => observer.disconnect();
-  }, []);
-
-  // Scroll progress is written straight to the DOM so scrolling never re-renders React.
-  useEffect(() => {
+    const ids = ['overview', ...navLinks.map(({ id }) => id)];
+    let current = null;
     let frame = 0;
     const update = () => {
       frame = 0;
       const max = document.documentElement.scrollHeight - window.innerHeight;
       if (progressRef.current) progressRef.current.style.transform = `scaleX(${max > 0 ? window.scrollY / max : 0})`;
+
+      const line = window.innerHeight * 0.25;
+      let next = ids[0];
+      for (const id of ids) {
+        const el = document.getElementById(id);
+        if (el && el.getBoundingClientRect().top <= line) next = id;
+      }
+      if (next !== current) {
+        current = next;
+        setActive(next);
+      }
     };
     const onScroll = () => {
       if (!frame) frame = requestAnimationFrame(update);
@@ -45,8 +49,56 @@ export default function Header() {
     };
   }, []);
 
+  // One underline slides between nav links. When it was hidden, it jumps into place
+  // instead of flying in from the left edge.
+  useEffect(() => {
+    const bar = barRef.current;
+    if (!bar) return;
+    const place = () => {
+      const link = linkRefs.current[active];
+      if (!link || !link.offsetWidth) {
+        bar.style.opacity = '0';
+        return;
+      }
+      const wasHidden = bar.style.opacity !== '1';
+      if (wasHidden) bar.style.transition = 'none';
+      bar.style.transform = `translateX(${link.offsetLeft}px) scaleX(${link.offsetWidth})`;
+      bar.style.opacity = '1';
+      if (wasHidden) {
+        void bar.offsetWidth;
+        bar.style.transition = '';
+      }
+    };
+    place();
+    document.fonts?.ready.then(place);
+    window.addEventListener('resize', place);
+    return () => window.removeEventListener('resize', place);
+  }, [active]);
+
+  // The mobile menu closes on Esc (focus goes back to the toggle) or a tap outside the header.
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onKey = (e) => {
+      if (e.key !== 'Escape') return;
+      setMenuOpen(false);
+      toggleRef.current?.focus();
+    };
+    const onPointer = (e) => {
+      if (!headerRef.current?.contains(e.target)) setMenuOpen(false);
+    };
+    document.addEventListener('keydown', onKey);
+    document.addEventListener('pointerdown', onPointer);
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      document.removeEventListener('pointerdown', onPointer);
+    };
+  }, [menuOpen]);
+
   return (
-    <header className="fixed inset-x-0 top-0 z-50 bg-surface/75 shadow-[0_1px_8px_rgba(0,0,0,0.04)] backdrop-blur-xl">
+    <header
+      ref={headerRef}
+      className="fixed inset-x-0 top-0 z-50 bg-surface/75 shadow-[0_1px_8px_rgba(0,0,0,0.04)] backdrop-blur-xl print:hidden"
+    >
       <div
         ref={progressRef}
         aria-hidden="true"
@@ -57,36 +109,34 @@ export default function Header() {
           <span className="whitespace-nowrap font-display text-[1.05rem] tracking-tight text-on-surface transition-colors group-hover:text-primary sm:text-headline-sm">
             {profile.name}
           </span>
-          <span className="mt-0.5 flex items-center gap-1.5">
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-pill bg-primary opacity-75" />
-              <span className="relative inline-flex h-2 w-2 rounded-pill bg-primary" />
-            </span>
-            <span className="whitespace-nowrap text-label-sm uppercase tracking-widest text-on-surface-variant">
-              <span className="sm:hidden">Founding SDE</span>
-              <span className="hidden sm:inline">Founding engineer, Quickads</span>
-            </span>
+          <span className="mt-0.5 whitespace-nowrap text-label-sm text-on-surface-variant">
+            <span className="sm:hidden">Founding SDE</span>
+            <span className="hidden sm:inline lg:hidden xl:inline">Founding engineer, Quickads</span>
+            <span className="hidden lg:inline xl:hidden">Founding SDE, Quickads</span>
           </span>
         </a>
 
-        <nav aria-label="Primary" className="hidden items-center gap-6 xl:flex">
+        <nav aria-label="Primary" className="relative hidden items-center gap-5 lg:flex xl:gap-7">
           {navLinks.map(({ id, label }) => (
             <a
               key={id}
+              ref={(el) => {
+                linkRefs.current[id] = el;
+              }}
               href={`#${id}`}
-              aria-current={active === id ? 'true' : undefined}
-              className={`relative py-1 text-label-md uppercase tracking-wider transition-colors ${
+              aria-current={active === id ? 'location' : undefined}
+              className={`py-1 text-label-md transition-colors ${
                 active === id ? 'text-primary' : 'text-on-surface-variant hover:text-on-surface'
               }`}
             >
               {label}
-              <span
-                className={`absolute -bottom-0.5 left-0 h-px w-full origin-left bg-primary transition-transform duration-300 ${
-                  active === id ? 'scale-x-100' : 'scale-x-0'
-                }`}
-              />
             </a>
           ))}
+          <span
+            ref={barRef}
+            aria-hidden="true"
+            className="pointer-events-none absolute -bottom-0.5 left-0 h-px w-px origin-left bg-primary opacity-0 transition-[transform,opacity] duration-300 ease-[cubic-bezier(0.2,0.7,0.2,1)]"
+          />
         </nav>
 
         <div className="flex items-center gap-2 sm:gap-3">
@@ -94,61 +144,68 @@ export default function Header() {
             href={profile.resume}
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden items-center justify-center rounded-lg bg-surface-container-high px-4 py-2 text-label-md uppercase tracking-wider text-on-surface transition-all hover:bg-surface-bright sm:inline-flex"
+            className="hidden items-center justify-center rounded-lg bg-surface-container-high px-4 py-2 text-label-md text-on-surface transition-[background-color,box-shadow,color] hover:bg-surface-bright sm:inline-flex"
           >
             Resume
           </a>
           <a
-            href="#connect"
-            className="inline-flex items-center justify-center whitespace-nowrap rounded-lg bg-primary-container px-3 py-2 text-label-md sm:px-4 uppercase tracking-wider text-on-primary shadow-[0_0_24px_rgba(6,182,212,0.35)] transition-all hover:bg-primary hover:shadow-[0_0_32px_rgba(6,182,212,0.55)]"
+            href={profile.booking || '#connect'}
+            {...(profile.booking ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+            className="inline-flex items-center justify-center whitespace-nowrap rounded-lg bg-primary-container px-3 py-2 text-label-md text-on-primary shadow-[0_0_24px_rgba(6,182,212,0.35)] transition-[background-color,box-shadow,color] hover:bg-primary hover:shadow-[0_0_32px_rgba(6,182,212,0.55)] sm:px-4"
           >
-            Book a call
-          </a>
-          <a
-            href="#overview"
-            aria-label="Back to top"
-            className="relative hidden h-8 w-8 shrink-0 overflow-hidden rounded-full ring-1 ring-primary/40 sm:block"
-          >
-            <Image src="/portrait.jpg" alt="" fill sizes="32px" className="object-cover object-top" />
+            {profile.booking ? (
+              'Book a call'
+            ) : (
+              <>
+                <span className="sm:hidden">Contact</span>
+                <span className="hidden sm:inline">Get in touch</span>
+              </>
+            )}
           </a>
           <button
+            ref={toggleRef}
             type="button"
             onClick={() => setMenuOpen((o) => !o)}
             aria-expanded={menuOpen}
             aria-controls="mobile-nav"
             aria-label={menuOpen ? 'Close menu' : 'Open menu'}
-            className="rounded-lg p-2 text-on-surface-variant transition-colors hover:bg-surface-container hover:text-on-surface xl:hidden"
+            className="rounded-lg p-2 text-on-surface-variant transition-colors hover:bg-surface-container hover:text-on-surface lg:hidden"
           >
             {menuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
       </div>
 
-      {menuOpen && (
-        <nav id="mobile-nav" aria-label="Mobile" className="bg-surface/95 px-margin-sm pb-4 backdrop-blur-xl md:px-margin xl:hidden">
-          {navLinks.map(({ id, label }) => (
+      <div id="mobile-nav" className="disclosure lg:hidden" data-open={menuOpen} inert={menuOpen ? undefined : ''}>
+        <div>
+          <nav aria-label="Mobile" className="bg-surface/95 px-margin-sm pb-4 pt-2 backdrop-blur-xl md:px-margin">
+            {navLinks.map(({ id, label }) => (
+              <a
+                key={id}
+                href={`#${id}`}
+                onClick={() => setMenuOpen(false)}
+                aria-current={active === id ? 'location' : undefined}
+                className={`flex items-center justify-between border-b border-white/5 py-3 text-label-lg last:border-0 ${
+                  active === id ? 'text-primary' : 'text-on-surface-variant'
+                }`}
+              >
+                {label}
+                <span aria-hidden="true" className="text-outline">
+                  ›
+                </span>
+              </a>
+            ))}
             <a
-              key={id}
-              href={`#${id}`}
-              onClick={() => setMenuOpen(false)}
-              className={`flex items-center justify-between border-b border-white/5 py-3 text-label-lg uppercase tracking-wider last:border-0 ${
-                active === id ? 'text-primary' : 'text-on-surface-variant'
-              }`}
+              href={profile.resume}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-3 flex items-center justify-center rounded-lg bg-surface-container-high py-3 text-label-md text-on-surface sm:hidden"
             >
-              {label}
-              <span className="text-outline">›</span>
+              Resume
             </a>
-          ))}
-          <a
-            href={profile.resume}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-3 flex items-center justify-center rounded-lg bg-surface-container-high py-3 text-label-md uppercase tracking-wider text-on-surface sm:hidden"
-          >
-            Resume
-          </a>
-        </nav>
-      )}
+          </nav>
+        </div>
+      </div>
     </header>
   );
 }

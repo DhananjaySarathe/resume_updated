@@ -1,3 +1,5 @@
+/* Motion budget: the aurora and one slow pulse on the current job are the only infinite animations.
+   Hover movement is for things you can click. */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -16,6 +18,23 @@
 
   ::selection {
     @apply bg-primary-container text-on-primary;
+  }
+
+  /* Focus rings take the accent of the card they sit in (cards set --glow inline). */
+  :focus-visible {
+    outline: 2px solid rgb(var(--glow, 76 215 246));
+    outline-offset: 3px;
+  }
+
+  h1,
+  h2,
+  h3,
+  blockquote {
+    text-wrap: balance;
+  }
+  p,
+  li {
+    text-wrap: pretty;
   }
 
   ::-webkit-scrollbar {
@@ -46,7 +65,8 @@
       transform 0.35s ease;
   }
   /* Hover glow; colour comes from --glow (RGB triplet). */
-  .glass-hover:hover {
+  .glass-hover:hover,
+  .glass-hover:focus-within {
     box-shadow:
       inset 0 1px 0 0 rgba(255, 255, 255, 0.07),
       0 0 38px rgb(var(--glow, 76 215 246) / 0.22);
@@ -54,6 +74,17 @@
 
   .eyebrow {
     @apply flex items-center gap-2 text-label-sm uppercase tracking-widest;
+  }
+
+  .text-link {
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-decoration-color: rgb(76 215 246 / 0.4);
+    text-underline-offset: 0.2em;
+    transition: text-decoration-color 0.2s ease;
+  }
+  .text-link:hover {
+    text-decoration-color: rgb(76 215 246);
   }
 
   /* --- Scroll reveal (animation with `backwards` fill so it never fights hover transitions) --- */
@@ -69,6 +100,20 @@
   .hero-in {
     animation: hero-in 1s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
     animation-delay: var(--d, 0ms);
+  }
+  /* Movement only, no fade: the paragraph and photo paint at once (they're the LCP candidates). */
+  .hero-rise {
+    animation: hero-rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+    animation-delay: var(--d, 0ms);
+  }
+
+  /* One glow when a link lands on these, then nothing. */
+  #quickads-modules:target {
+    --glow: 76 215 246;
+    animation: target-flash 1.6s ease-out 0.3s backwards;
+  }
+  .footnotes li:target {
+    animation: fn-flash 1.4s ease-out backwards;
   }
 
   /* --- Cursor-following glow on glass cards --- */
@@ -147,7 +192,60 @@
   }
 }
 
+@keyframes hero-rise {
+  from {
+    transform: translate3d(0, 16px, 0);
+  }
+  to {
+    transform: none;
+  }
+}
+
+@keyframes target-flash {
+  from {
+    box-shadow:
+      0 0 0 1px rgb(var(--glow) / 0.6),
+      0 0 38px rgb(var(--glow) / 0.25);
+  }
+  to {
+    box-shadow: none;
+  }
+}
+
+@keyframes fn-flash {
+  from {
+    background-color: rgb(76 215 246 / 0.12);
+  }
+  to {
+    background-color: transparent;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .glass,
+  [class*='backdrop-blur'] {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+  .glass {
+    background-color: #1a1b1f;
+  }
+  header,
+  #mobile-nav nav {
+    background-color: #121317 !important;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
+  #quickads-modules:target {
+    outline: 1px solid rgb(76 215 246 / 0.6);
+    outline-offset: 6px;
+  }
+  .footnotes li:target {
+    text-decoration: underline;
+    text-decoration-color: rgb(76 215 246 / 0.6);
+    text-underline-offset: 0.2em;
+  }
   html {
     scroll-behavior: auto;
   }

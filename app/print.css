@@ -1,0 +1,147 @@
+/* Cmd+P prints a plain resume: dark ink on white, no background, photos or buttons. */
+@media print {
+  @page {
+    size: A4;
+    margin: 14mm 16mm;
+  }
+
+  /* Everything is sized in rem, so one number scales the whole resume down. */
+  html {
+    font-size: 11px;
+  }
+  html,
+  body {
+    background: #fff !important;
+    color: #111 !important;
+  }
+
+  * {
+    background-color: transparent !important;
+    background-image: none !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    color: #111 !important;
+  }
+
+  .text-on-surface-variant,
+  .text-outline {
+    color: #444 !important;
+  }
+  .text-primary {
+    color: #0e7490 !important;
+  }
+  .text-secondary {
+    color: #5b21b6 !important;
+  }
+  .text-tertiary {
+    color: #92400e !important;
+  }
+
+  /* Gradient words are transparent text over a gradient; print them in ink. */
+  .bg-clip-text.text-transparent {
+    -webkit-text-fill-color: currentColor !important;
+  }
+
+  .js [data-reveal],
+  .hero-in,
+  .hero-rise {
+    opacity: 1 !important;
+    animation: none !important;
+    transform: none !important;
+    filter: none !important;
+  }
+
+  /* Count-ups print their final value from the screen-reader text, whether or not
+     they ever scrolled into view. */
+  .count-up > [aria-hidden='true'] {
+    display: none !important;
+  }
+  .count-up > .sr-only {
+    position: static !important;
+    width: auto !important;
+    height: auto !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    clip: auto !important;
+    white-space: normal !important;
+  }
+
+  /* Build notes print open. Buttons and icon tiles have nothing to say on paper. */
+  .disclosure {
+    grid-template-rows: 1fr !important;
+  }
+  button,
+  .footnotes,
+  #about li a[href^='#fn'],
+  #about p,
+  #metrics .glass > div:first-child,
+  #projects article > div:first-child > div:first-child {
+    display: none !important;
+  }
+
+  /* A4 is narrower than the tablet breakpoint, so the grids are set here. */
+  #metrics .grid,
+  #stack .grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 1rem !important;
+  }
+  #projects .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 1.25rem !important;
+  }
+  #quickads-modules {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 0.5rem 1.25rem !important;
+    margin-top: 0.75rem !important;
+  }
+  #quickads-modules > div,
+  .glass,
+  #about > div {
+    padding: 0 !important;
+  }
+  #metrics .font-display {
+    font-size: 2.25rem !important;
+  }
+  #experience ol {
+    gap: 0 !important;
+  }
+  #experience ol > li + li {
+    margin-top: 1.25rem !important;
+  }
+  #overview h1 {
+    margin-bottom: 0.75rem !important;
+  }
+  .mb-10,
+  .mb-12,
+  .mb-14 {
+    margin-bottom: 1rem !important;
+  }
+
+  section {
+    padding-top: 0 !important;
+    padding-bottom: 1.25rem !important;
+  }
+  article,
+  #stack,
+  #experience li,
+  #stack .glass,
+  #metrics .glass {
+    break-inside: avoid;
+  }
+  h2,
+  h3 {
+    break-after: avoid;
+  }
+
+  #projects h3 a::after {
+    content: attr(href);
+    display: block;
+    margin-top: 0.2em;
+    overflow-wrap: anywhere;
+    font-family: ui-monospace, Menlo, monospace;
+    font-size: 0.45em;
+    color: #555;
+  }
+}

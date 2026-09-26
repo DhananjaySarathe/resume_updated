@@ -4,7 +4,7 @@ export default function SectionHeader({ icon: Icon, eyebrow, title, note, tone =
     <div className={`flex flex-col justify-between gap-4 md:flex-row md:items-end ${className}`} data-reveal>
       <div>
         <div className={`eyebrow mb-2 ${tone}`}>
-          <Icon size={16} aria-hidden="true" />
+          {Icon && <Icon size={16} aria-hidden="true" />}
           <span>{eyebrow}</span>
         </div>
         <h2 className="font-display text-headline-lg-mobile tracking-tight text-on-surface md:text-headline-lg">{title}</h2>

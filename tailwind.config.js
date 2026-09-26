@@ -39,7 +39,8 @@ module.exports = {
       fontFamily: {
         display: ['var(--font-bodoni)', 'serif'],
         sans: ['var(--font-hanken)', 'sans-serif'],
-        mono: ['var(--font-geist-mono)', 'monospace'],
+        // System monospace: it only sets a commit hash, file paths and one npx command.
+        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Consolas', 'monospace'],
       },
       fontSize: {
         'display-hero': ['5rem', { lineHeight: '1.05', letterSpacing: '-0.03em', fontWeight: '700' }],
@@ -53,14 +54,23 @@ module.exports = {
         'body-lg': ['1.125rem', { lineHeight: '1.6', letterSpacing: '0em', fontWeight: '400' }],
         'body-md': ['1rem', { lineHeight: '1.55', letterSpacing: '0.005em', fontWeight: '400' }],
         'body-sm': ['0.9375rem', { lineHeight: '1.55', letterSpacing: '0.005em', fontWeight: '400' }],
-        'label-lg': ['0.875rem', { lineHeight: '1.25', letterSpacing: '0.06em', fontWeight: '600' }],
-        'label-md': ['0.8125rem', { lineHeight: '1.25', letterSpacing: '0.06em', fontWeight: '600' }],
-        'label-sm': ['0.75rem', { lineHeight: '1.25', letterSpacing: '0.07em', fontWeight: '500' }],
+        'label-lg': ['0.875rem', { lineHeight: '1.25', letterSpacing: '0.01em', fontWeight: '600' }],
+        'label-md': ['0.8125rem', { lineHeight: '1.25', letterSpacing: '0.01em', fontWeight: '600' }],
+        'label-sm': ['0.75rem', { lineHeight: '1.25', letterSpacing: '0.01em', fontWeight: '500' }],
       },
       spacing: {
         'margin-sm': '1.25rem',
         margin: '2rem',
         'margin-lg': '4rem',
+      },
+      keyframes: {
+        'pulse-slow': {
+          '0%': { transform: 'scale(1)', opacity: '0.6' },
+          '70%, 100%': { transform: 'scale(2.4)', opacity: '0' },
+        },
+      },
+      animation: {
+        'pulse-slow': 'pulse-slow 2.8s cubic-bezier(0, 0, 0.2, 1) infinite',
       },
     },
   },

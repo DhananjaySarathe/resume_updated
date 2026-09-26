@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import { AURORA_EVENTS, AURORA_FPS, AURORA_STORAGE_KEY, RENDER_SCALE, auroraStill } from '@/lib/aurora';
 
 // Ported from the Stitch "Luminescent" shader: violet + cyan aurora ribbons over a faint star grid.
 const VERTEX = `attribute vec2 a_position;
@@ -57,10 +58,6 @@ void main() {
   gl_FragColor = vec4(color, 1.0);
 }`;
 
-// The aurora is soft by nature, so it renders at a fraction of the screen size and is
-// scaled up by CSS. Visually identical, a fraction of the GPU cost.
-const RENDER_SCALE = 0.5;
-
 function compile(gl, type, source) {
   const shader = gl.createShader(type);
   gl.shaderSource(shader, source);
@@ -101,18 +98,6 @@ export default function Aurora() {
     const uRes = gl.getUniformLocation(program, 'u_resolution');
     const uMouse = gl.getUniformLocation(program, 'u_mouse');
 
-    const syncSize = () => {
-      const w = Math.max(1, Math.round(canvas.clientWidth * RENDER_SCALE));
-      const h = Math.max(1, Math.round(canvas.clientHeight * RENDER_SCALE));
-      if (canvas.width !== w || canvas.height !== h) {
-        canvas.width = w;
-        canvas.height = h;
-      }
-    };
-    syncSize();
-    const resizeObserver = new ResizeObserver(syncSize);
-    resizeObserver.observe(canvas);
-
     // The pointer eases toward its target so the parallax drifts instead of snapping.
     const target = { x: 0.5, y: 0.5 };
     const eased = { x: 0.5, y: 0.5 };
@@ -122,42 +107,91 @@ export default function Aurora() {
     };
     window.addEventListener('pointermove', onPointerMove, { passive: true });
 
-    const draw = (ms) => {
-      eased.x += (target.x - eased.x) * 0.04;
-      eased.y += (target.y - eased.y) * 0.04;
+    // The shader clock only advances by drawn time, so a pause or a hidden tab resumes
+    // where it left off instead of jumping.
+    let clock = 12000;
+    const draw = (dt) => {
+      clock += dt;
+      // Time-based easing: the same drift speed at 30 fps as it had at 60.
+      const k = 1 - Math.pow(0.96, dt / 16.67);
+      eased.x += (target.x - eased.x) * k;
+      eased.y += (target.y - eased.y) * k;
       gl.viewport(0, 0, canvas.width, canvas.height);
-      gl.uniform1f(uTime, ms * 0.001);
+      gl.uniform1f(uTime, clock * 0.001);
       gl.uniform2f(uRes, canvas.width, canvas.height);
       gl.uniform2f(uMouse, eased.x * canvas.width, eased.y * canvas.height);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     };
 
     let frame = 0;
+    let last = -Infinity;
     const loop = (ms) => {
-      draw(ms);
       frame = requestAnimationFrame(loop);
+      // The first frame after a start only sets the baseline, so resuming doesn't jump.
+      if (last === -Infinity) {
+        last = ms;
+        return;
+      }
+      const dt = ms - last;
+      if (dt < 1000 / AURORA_FPS - 1) return;
+      last = ms;
+      draw(Math.min(dt, 100));
     };
+
+    let paused = false;
+    try {
+      paused = localStorage.getItem(AURORA_STORAGE_KEY) === 'paused';
+    } catch {}
+    const still = auroraStill();
+
     const start = () => {
-      if (!frame && !document.hidden) frame = requestAnimationFrame(loop);
+      if (!frame && !paused && !still && !document.hidden) {
+        last = -Infinity;
+        frame = requestAnimationFrame(loop);
+      }
     };
     const stop = () => {
       cancelAnimationFrame(frame);
       frame = 0;
     };
     const onVisibility = () => (document.hidden ? stop() : start());
-
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      draw(12000);
-    } else {
-      document.addEventListener('visibilitychange', onVisibility);
+    const onPause = () => {
+      paused = true;
+      stop();
+    };
+    const onPlay = () => {
+      paused = false;
       start();
-    }
+    };
+
+    // Resizing clears the canvas, and the observer runs after this frame's draw,
+    // so redraw straight away or the frame paints blank.
+    const syncSize = () => {
+      const w = Math.max(1, Math.round(canvas.clientWidth * RENDER_SCALE));
+      const h = Math.max(1, Math.round(canvas.clientHeight * RENDER_SCALE));
+      if (canvas.width !== w || canvas.height !== h) {
+        canvas.width = w;
+        canvas.height = h;
+        draw(0);
+      }
+    };
+    syncSize();
+    const resizeObserver = new ResizeObserver(syncSize);
+    resizeObserver.observe(canvas);
+
+    document.addEventListener('visibilitychange', onVisibility);
+    window.addEventListener(AURORA_EVENTS.pause, onPause);
+    window.addEventListener(AURORA_EVENTS.play, onPlay);
+    draw(0);
+    start();
 
     return () => {
       stop();
       resizeObserver.disconnect();
       window.removeEventListener('pointermove', onPointerMove);
       document.removeEventListener('visibilitychange', onVisibility);
+      window.removeEventListener(AURORA_EVENTS.pause, onPause);
+      window.removeEventListener(AURORA_EVENTS.play, onPlay);
       gl.deleteBuffer(buffer);
       gl.deleteProgram(program);
       gl.deleteShader(vs);
@@ -169,7 +203,7 @@ export default function Aurora() {
     <canvas
       ref={canvasRef}
       aria-hidden="true"
-      className="pointer-events-none fixed inset-0 -z-10 block h-full w-full"
+      className="pointer-events-none fixed inset-0 -z-10 block h-full w-full print:hidden"
     />
   );
 }
