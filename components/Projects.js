@@ -14,10 +14,10 @@ export default function Projects() {
       <SectionHeader
         eyebrow="Side projects"
         title="Things I built on my own"
-        note="Built outside work. All three are live, so you can try them."
+        note="Built outside work. All four are live, so you can try them."
       />
 
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
         {projects.map((p, i) => {
           const Icon = icons[p.icon];
           const a = accents[p.accent];

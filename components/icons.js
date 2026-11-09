@@ -15,6 +15,7 @@ import {
   Search,
   Server,
   Terminal,
+  Video,
   Wallet,
   Wrench,
 } from 'lucide-react';
@@ -37,6 +38,7 @@ export const icons = {
   search: Search,
   server: Server,
   terminal: Terminal,
+  video: Video,
   wallet: Wallet,
   wrench: Wrench,
 };
