@@ -94,6 +94,14 @@ export default function Projects() {
                       </a>
                     </h3>
                     <p className="mt-1 text-body-md font-medium text-on-surface">{p.category}</p>
+                    {p.builtWith && (
+                      <p className="mt-2 text-label-lg font-medium text-on-surface-variant">
+                        Built together with{' '}
+                        <a href={p.builtWith.url} target="_blank" rel="noopener noreferrer" className="text-link text-on-surface">
+                          {p.builtWith.name}
+                        </a>
+                      </p>
+                    )}
                     <p className="mt-4 text-body-md text-on-surface-variant">{p.desc}</p>
                     {p.slug === 'prunify' && (
                       <div className="mt-5 [&>div]:mb-0">
