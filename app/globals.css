@@ -1,28 +1,73 @@
-/* Motion budget: the aurora and one slow pulse on the current job are the only infinite animations.
-   Hover movement is for things you can click. */
+/* A reading-first theme: solid surfaces, one calm accent, no background effects.
+   Light is the default; dark follows the visitor's system setting. Colours are RGB
+   triplets so Tailwind's opacity modifiers keep working (tailwind.config.js). */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
+  :root {
+    color-scheme: light;
+    --c-background: 247 247 245;
+    --c-surface: 247 247 245;
+    --c-surface-container-lowest: 255 255 255;
+    --c-surface-container-low: 255 255 255;
+    --c-surface-container: 241 241 238;
+    --c-surface-container-high: 232 232 228;
+    --c-surface-container-highest: 214 214 208;
+    --c-surface-bright: 226 226 221;
+    --c-on-surface: 24 24 27;
+    --c-on-surface-variant: 68 68 74;
+    --c-outline: 100 100 108;
+    --c-outline-variant: 222 222 216;
+    --c-primary: 29 78 216;
+    --c-primary-container: 29 78 216;
+    --c-primary-fixed: 59 130 246;
+    --c-on-primary: 255 255 255;
+    --c-secondary: 13 108 100;
+    --c-tertiary: 154 70 6;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      color-scheme: dark;
+      --c-background: 17 18 20;
+      --c-surface: 17 18 20;
+      --c-surface-container-lowest: 12 13 15;
+      --c-surface-container-low: 24 25 28;
+      --c-surface-container: 33 34 38;
+      --c-surface-container-high: 42 44 48;
+      --c-surface-container-highest: 54 56 61;
+      --c-surface-bright: 48 50 55;
+      --c-on-surface: 236 236 239;
+      --c-on-surface-variant: 184 188 196;
+      --c-outline: 140 145 154;
+      --c-outline-variant: 48 51 56;
+      --c-primary: 138 173 255;
+      --c-primary-container: 47 95 224;
+      --c-primary-fixed: 120 160 255;
+      --c-on-primary: 255 255 255;
+      --c-secondary: 94 207 191;
+      --c-tertiary: 240 178 90;
+    }
+  }
+
   html {
     scroll-behavior: smooth;
     /* Keep anchored sections clear of the fixed header. */
-    scroll-padding-top: 6rem;
+    scroll-padding-top: 5.5rem;
   }
 
   body {
     @apply bg-background font-sans text-body-md text-on-surface antialiased;
-    overscroll-behavior-y: none;
   }
 
   ::selection {
-    @apply bg-primary-container text-on-primary;
+    @apply bg-primary/20 text-on-surface;
   }
 
-  /* Focus rings take the accent of the card they sit in (cards set --glow inline). */
   :focus-visible {
-    outline: 2px solid rgb(var(--glow, 76 215 246));
+    outline: 2px solid rgb(var(--c-primary));
     outline-offset: 3px;
   }
 
@@ -36,122 +81,49 @@
   li {
     text-wrap: pretty;
   }
-
-  ::-webkit-scrollbar {
-    width: 6px;
-  }
-  ::-webkit-scrollbar-track {
-    background: #0d0e12;
-  }
-  ::-webkit-scrollbar-thumb {
-    background: #292a2e;
-    border-radius: 3px;
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    background: #06b6d4;
-  }
 }
 
 @layer components {
-  /* Frosted obsidian glass, the design's core surface. A hairline top highlight
-     stands in for borders, which the design avoids. */
+  /* The card surface: solid, with a hairline border instead of blur and glow. */
   .glass {
-    @apply bg-surface-container-low/[0.86] backdrop-blur-2xl;
-    box-shadow:
-      inset 0 1px 0 0 rgba(255, 255, 255, 0.05),
-      0 4px 30px rgba(0, 0, 0, 0.5);
-    transition:
-      box-shadow 0.35s ease,
-      transform 0.35s ease;
+    @apply border border-outline-variant bg-surface-container-low;
+    transition: border-color 0.2s ease;
   }
-  /* Hover glow; colour comes from --glow (RGB triplet). */
   .glass-hover:hover,
   .glass-hover:focus-within {
-    box-shadow:
-      inset 0 1px 0 0 rgba(255, 255, 255, 0.07),
-      0 0 38px rgb(var(--glow, 76 215 246) / 0.22);
+    @apply border-outline/60;
   }
 
   .eyebrow {
-    @apply flex items-center gap-2 text-label-sm uppercase tracking-widest;
+    @apply flex items-center gap-2 text-label-sm font-semibold uppercase tracking-[0.08em];
   }
 
   .text-link {
     text-decoration-line: underline;
     text-decoration-thickness: 1px;
-    text-decoration-color: rgb(76 215 246 / 0.4);
+    text-decoration-color: rgb(var(--c-primary) / 0.45);
     text-underline-offset: 0.2em;
     transition: text-decoration-color 0.2s ease;
   }
   .text-link:hover {
-    text-decoration-color: rgb(76 215 246);
+    text-decoration-color: rgb(var(--c-primary));
   }
 
-  /* --- Scroll reveal (animation with `backwards` fill so it never fights hover transitions) --- */
-  .js [data-reveal]:not(.is-visible) {
-    opacity: 0;
-  }
-  .js [data-reveal].is-visible {
-    animation: reveal-up 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
-    animation-delay: var(--reveal-delay, 0ms);
-  }
-
-  /* --- Hero load sequence --- */
-  .hero-in {
-    animation: hero-in 1s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
-    animation-delay: var(--d, 0ms);
-  }
-  /* Movement only, no fade: the paragraph and photo paint at once (they're the LCP candidates). */
-  .hero-rise {
-    animation: hero-rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
-    animation-delay: var(--d, 0ms);
-  }
-
-  /* One glow when a link lands on these, then nothing. */
+  /* A link to these marks them once, quietly. */
   #quickads-modules:target {
-    --glow: 76 215 246;
-    animation: target-flash 1.6s ease-out 0.3s backwards;
+    outline: 2px solid rgb(var(--c-primary) / 0.5);
+    outline-offset: 8px;
+    border-radius: 0.625rem;
   }
   .footnotes li:target {
-    animation: fn-flash 1.4s ease-out backwards;
-  }
-
-  /* --- Cursor-following glow on glass cards --- */
-  .spotlight {
-    position: relative;
-  }
-  .spotlight::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    pointer-events: none;
-    background: radial-gradient(
-      420px circle at var(--mx, 50%) var(--my, 50%),
-      rgb(var(--glow, 76 215 246) / 0.09),
-      transparent 45%
-    );
-    opacity: 0;
-    transition: opacity 0.4s ease;
-  }
-  .spotlight:hover::after {
-    opacity: 1;
-  }
-
-  /* Light sheen that tracks the Tilt component's pointer position. */
-  .tilt-sheen {
-    background: radial-gradient(
-      600px circle at var(--sheen-x, 50%) var(--sheen-y, 50%),
-      rgba(172, 237, 255, 0.12),
-      transparent 45%
-    );
+    background-color: rgb(var(--c-primary) / 0.08);
   }
 
   /* --- Height-animating disclosure (grid rows 0fr → 1fr) --- */
   .disclosure {
     display: grid;
     grid-template-rows: 0fr;
-    transition: grid-template-rows 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
+    transition: grid-template-rows 0.3s ease;
   }
   .disclosure[data-open='true'] {
     grid-template-rows: 1fr;
@@ -159,93 +131,9 @@
   .disclosure > div {
     overflow: hidden;
   }
-
-  .no-scrollbar {
-    scrollbar-width: none;
-  }
-  .no-scrollbar::-webkit-scrollbar {
-    display: none;
-  }
-}
-
-@keyframes reveal-up {
-  from {
-    opacity: 0;
-    transform: translate3d(0, 20px, 0);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-@keyframes hero-in {
-  from {
-    opacity: 0;
-    transform: translate3d(0, 24px, 0);
-    filter: blur(8px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-    filter: blur(0);
-  }
-}
-
-@keyframes hero-rise {
-  from {
-    transform: translate3d(0, 16px, 0);
-  }
-  to {
-    transform: none;
-  }
-}
-
-@keyframes target-flash {
-  from {
-    box-shadow:
-      0 0 0 1px rgb(var(--glow) / 0.6),
-      0 0 38px rgb(var(--glow) / 0.25);
-  }
-  to {
-    box-shadow: none;
-  }
-}
-
-@keyframes fn-flash {
-  from {
-    background-color: rgb(76 215 246 / 0.12);
-  }
-  to {
-    background-color: transparent;
-  }
-}
-
-@media (prefers-reduced-transparency: reduce) {
-  .glass,
-  [class*='backdrop-blur'] {
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-  }
-  .glass {
-    background-color: #1a1b1f;
-  }
-  header,
-  #mobile-nav nav {
-    background-color: #121317 !important;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  #quickads-modules:target {
-    outline: 1px solid rgb(76 215 246 / 0.6);
-    outline-offset: 6px;
-  }
-  .footnotes li:target {
-    text-decoration: underline;
-    text-decoration-color: rgb(76 215 246 / 0.6);
-    text-underline-offset: 0.2em;
-  }
   html {
     scroll-behavior: auto;
   }
@@ -257,8 +145,5 @@
     animation-delay: 0ms !important;
     transition-duration: 0.01ms !important;
     transition-delay: 0ms !important;
-  }
-  .js [data-reveal]:not(.is-visible) {
-    opacity: 1;
   }
 }

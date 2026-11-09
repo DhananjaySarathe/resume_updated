@@ -1,9 +1,7 @@
 import { ArrowUp, ChevronDown, Code2, Github, Linkedin } from 'lucide-react';
 import { profile } from '@/lib/data';
-import { AURORA_FPS, RENDER_SCALE } from '@/lib/aurora';
 import colophon from '@/lib/colophon.json';
 import { repoUrl } from '@/lib/site';
-import AuroraToggle from './AuroraToggle';
 import ColophonVitals from './ColophonVitals';
 
 const links = [
@@ -30,11 +28,9 @@ const fillCounts = (text) =>
   text.replace('{total}', total).replace('{client}', client).replace('{server}', total - client);
 
 export default function Footer() {
-  const scale = RENDER_SCALE === 0.5 ? 'half' : `${RENDER_SCALE * 100}% of`;
-
   return (
-    <footer id="colophon" className="relative w-full bg-surface-container-lowest/90 backdrop-blur-xl print:hidden">
-      <div className="mx-auto max-w-[1440px] px-margin-sm py-12 md:px-margin lg:px-margin-lg">
+    <footer id="colophon" className="relative w-full border-t border-outline-variant bg-surface-container-low print:hidden">
+      <div className="mx-auto max-w-[1200px] px-margin-sm py-12 md:px-margin lg:px-margin-lg">
         <div className="flex flex-col items-start justify-between gap-5 pb-8 md:flex-row md:items-center">
           <span className="font-display text-headline-sm text-on-surface">{profile.name}</span>
           <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
@@ -59,13 +55,11 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="grid gap-8 border-t border-white/5 pt-8 lg:grid-cols-12 lg:gap-12">
+        <div className="grid gap-8 border-t border-outline-variant pt-8 lg:grid-cols-12 lg:gap-12">
           <div className="max-w-[62ch] space-y-3 text-body-sm text-on-surface-variant lg:col-span-7">
             <h2 className="eyebrow text-primary">About this page</h2>
             <p>
-              Set in Bodoni Moda and Hanken Grotesk. The light behind the page is a WebGL shader, drawn at {scale} the
-              window&apos;s width and height and at most {AURORA_FPS} frames a second. It stops while the tab is hidden, and holds a
-              single frame if your system asks for reduced motion. <AuroraToggle />
+              Set in Hanken Grotesk, in a light or dark theme that follows your system setting.
             </p>
             {sha && (
               <p>
@@ -85,7 +79,7 @@ export default function Footer() {
           </div>
 
           <details className="group self-start lg:col-span-5">
-            <summary className="flex min-h-10 w-full cursor-pointer list-none items-center justify-between rounded-lg bg-surface-container/70 px-3 py-2 text-label-md text-on-surface-variant transition-colors hover:bg-surface-container-high hover:text-on-surface [&::-webkit-details-marker]:hidden">
+            <summary className="flex min-h-10 w-full cursor-pointer list-none items-center justify-between rounded-lg bg-surface-container px-3 py-2 text-label-md text-on-surface-variant transition-colors hover:bg-surface-container-high hover:text-on-surface [&::-webkit-details-marker]:hidden">
               How this page is built
               <ChevronDown size={15} aria-hidden="true" className="transition-transform duration-300 group-open:rotate-180" />
             </summary>

@@ -39,20 +39,6 @@
     color: #92400e !important;
   }
 
-  /* Gradient words are transparent text over a gradient; print them in ink. */
-  .bg-clip-text.text-transparent {
-    -webkit-text-fill-color: currentColor !important;
-  }
-
-  .js [data-reveal],
-  .hero-in,
-  .hero-rise {
-    opacity: 1 !important;
-    animation: none !important;
-    transform: none !important;
-    filter: none !important;
-  }
-
   /* Count-ups print their final value from the screen-reader text, whether or not
      they ever scrolled into view. */
   .count-up > [aria-hidden='true'] {

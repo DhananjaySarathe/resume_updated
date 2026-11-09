@@ -4,7 +4,7 @@ import { icons } from './icons';
 
 export default function Stack() {
   return (
-    <section id="stack" className="mx-auto w-full max-w-[1440px] px-margin-sm py-16 md:px-margin lg:px-margin-lg">
+    <section id="stack" className="mx-auto w-full max-w-[1200px] px-margin-sm py-16 md:px-margin lg:px-margin-lg">
       <SectionHeader eyebrow="Stack" title="What I build with" />
 
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
@@ -14,9 +14,7 @@ export default function Stack() {
           return (
             <div
               key={group.title}
-              data-reveal
-              style={{ '--reveal-delay': `${i * 90}ms`, '--glow': a.glow }}
-              className="glass glass-hover spotlight rounded-xl p-6"
+              className="glass glass-hover rounded-xl p-6"
             >
               <div className={`mb-4 flex items-center gap-2 ${a.text}`}>
                 <Icon size={19} aria-hidden="true" />

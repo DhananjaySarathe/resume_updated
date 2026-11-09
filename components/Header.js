@@ -97,16 +97,16 @@ export default function Header() {
   return (
     <header
       ref={headerRef}
-      className="fixed inset-x-0 top-0 z-50 bg-surface/75 shadow-[0_1px_8px_rgba(0,0,0,0.04)] backdrop-blur-xl print:hidden"
+      className="fixed inset-x-0 top-0 z-50 border-b border-outline-variant bg-surface print:hidden"
     >
       <div
         ref={progressRef}
         aria-hidden="true"
-        className="absolute inset-x-0 bottom-0 h-px origin-left scale-x-0 bg-gradient-to-r from-primary via-secondary to-primary-fixed"
+        className="absolute inset-x-0 -bottom-px h-0.5 origin-left scale-x-0 bg-primary"
       />
-      <div className="mx-auto flex h-20 max-w-[1440px] items-center justify-between gap-4 px-margin-sm md:px-margin lg:px-margin-lg">
+      <div className="mx-auto flex h-16 max-w-[1200px] items-center justify-between gap-4 px-margin-sm md:px-margin lg:px-margin-lg">
         <a href="#overview" className="group flex flex-col">
-          <span className="whitespace-nowrap font-display text-[1.05rem] tracking-tight text-on-surface transition-colors group-hover:text-primary sm:text-headline-sm">
+          <span className="whitespace-nowrap font-display text-[1.05rem] font-semibold tracking-tight text-on-surface transition-colors group-hover:text-primary sm:text-headline-sm">
             {profile.name}
           </span>
           <span className="mt-0.5 whitespace-nowrap text-label-sm text-on-surface-variant">
@@ -144,23 +144,9 @@ export default function Header() {
             href={profile.resume}
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden items-center justify-center rounded-lg bg-surface-container-high px-4 py-2 text-label-md text-on-surface transition-[background-color,box-shadow,color] hover:bg-surface-bright sm:inline-flex"
+            className="hidden items-center justify-center rounded-lg border border-outline-variant px-4 py-2 text-label-md text-on-surface transition-colors hover:bg-surface-container sm:inline-flex"
           >
             Resume
-          </a>
-          <a
-            href={profile.booking || '#connect'}
-            {...(profile.booking ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-            className="inline-flex items-center justify-center whitespace-nowrap rounded-lg bg-primary-container px-3 py-2 text-label-md text-on-primary shadow-[0_0_24px_rgba(6,182,212,0.35)] transition-[background-color,box-shadow,color] hover:bg-primary hover:shadow-[0_0_32px_rgba(6,182,212,0.55)] sm:px-4"
-          >
-            {profile.booking ? (
-              'Book a call'
-            ) : (
-              <>
-                <span className="sm:hidden">Contact</span>
-                <span className="hidden sm:inline">Get in touch</span>
-              </>
-            )}
           </a>
           <button
             ref={toggleRef}
@@ -178,14 +164,14 @@ export default function Header() {
 
       <div id="mobile-nav" className="disclosure lg:hidden" data-open={menuOpen} inert={menuOpen ? undefined : ''}>
         <div>
-          <nav aria-label="Mobile" className="bg-surface/95 px-margin-sm pb-4 pt-2 backdrop-blur-xl md:px-margin">
+          <nav aria-label="Mobile" className="bg-surface px-margin-sm pb-4 pt-2 md:px-margin">
             {navLinks.map(({ id, label }) => (
               <a
                 key={id}
                 href={`#${id}`}
                 onClick={() => setMenuOpen(false)}
                 aria-current={active === id ? 'location' : undefined}
-                className={`flex items-center justify-between border-b border-white/5 py-3 text-label-lg last:border-0 ${
+                className={`flex items-center justify-between border-b border-outline-variant py-3 text-label-lg last:border-0 ${
                   active === id ? 'text-primary' : 'text-on-surface-variant'
                 }`}
               >

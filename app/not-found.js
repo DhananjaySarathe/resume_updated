@@ -1,7 +1,5 @@
 import Image from 'next/image';
-import { ArrowUpRight } from 'lucide-react';
 import { photos } from '@/lib/data';
-import Aurora from '@/components/Aurora';
 import RequestedPath from '@/components/RequestedPath';
 
 export const metadata = { title: 'Not found | Dhananjay Sarathe' };
@@ -9,7 +7,6 @@ export const metadata = { title: 'Not found | Dhananjay Sarathe' };
 export default function NotFound() {
   return (
     <>
-      <Aurora />
       <main
         id="main"
         tabIndex={-1}
@@ -26,16 +23,9 @@ export default function NotFound() {
           <div className="flex flex-col gap-3 sm:flex-row">
             <a
               href="/#projects"
-              className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary-container px-6 py-3.5 text-label-lg text-on-primary transition-colors hover:bg-primary"
+              className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary-container px-6 py-3.5 text-label-lg text-on-primary transition-colors hover:bg-primary-container/90"
             >
               See the projects
-            </a>
-            <a
-              href="/#connect"
-              className="group inline-flex items-center justify-center gap-2 rounded-lg bg-surface-container/90 px-6 py-3.5 text-label-lg text-on-surface transition-colors hover:bg-surface-bright"
-            >
-              Get in touch
-              <ArrowUpRight size={17} aria-hidden="true" className="text-primary" />
             </a>
           </div>
         </div>

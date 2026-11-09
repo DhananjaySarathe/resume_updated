@@ -23,7 +23,7 @@ function MetricValue({ value }) {
 
 export default function Metrics() {
   return (
-    <section id="metrics" className="mx-auto w-full max-w-[1440px] px-margin-sm py-16 md:px-margin lg:px-margin-lg">
+    <section id="metrics" className="mx-auto w-full max-w-[1200px] px-margin-sm py-16 md:px-margin lg:px-margin-lg">
       <SectionHeader eyebrow="Impact" title="A few numbers from the job" className="mb-10" />
 
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
@@ -33,9 +33,7 @@ export default function Metrics() {
           return (
             <div
               key={m.title}
-              data-reveal
-              style={{ '--reveal-delay': `${i * 90}ms`, '--glow': a.glow }}
-              className="glass glass-hover spotlight group flex flex-col justify-between rounded-xl p-6"
+              className="glass glass-hover group flex flex-col justify-between rounded-xl p-6"
             >
               <div className="mb-8 flex items-center justify-between">
                 <span className={`rounded-lg bg-surface-container p-2.5 ${a.text}`}>

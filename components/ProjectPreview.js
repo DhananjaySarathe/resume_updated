@@ -100,7 +100,7 @@ export default function ProjectPreview({ title, preview }) {
         type="button"
         onClick={() => toggle.current()}
         aria-label={playing ? `Pause the ${title} preview` : `Play the ${title} preview`}
-        className="absolute bottom-2.5 right-2.5 flex h-8 w-8 items-center justify-center rounded-pill bg-black/55 text-white opacity-80 backdrop-blur-sm transition-opacity hover:opacity-100 focus-visible:opacity-100"
+        className="absolute bottom-2.5 right-2.5 flex h-8 w-8 items-center justify-center rounded-pill bg-black/55 text-white opacity-80 transition-opacity hover:opacity-100 focus-visible:opacity-100"
       >
         {playing ? <Pause size={14} aria-hidden="true" /> : <Play size={14} aria-hidden="true" />}
       </button>

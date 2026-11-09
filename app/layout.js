@@ -1,18 +1,8 @@
-import { Bodoni_Moda, Hanken_Grotesk } from 'next/font/google';
+import { Hanken_Grotesk } from 'next/font/google';
 import { experience, profile } from '@/lib/data';
 import { siteUrl } from '@/lib/site';
 import './globals.css';
 import './print.css';
-
-const bodoni = Bodoni_Moda({
-  subsets: ['latin'],
-  axes: ['opsz'],
-  style: ['normal', 'italic'],
-  variable: '--font-bodoni',
-  display: 'swap',
-  fallback: ['Didot', 'Georgia', 'serif'],
-  adjustFontFallback: false,
-});
 
 const hanken = Hanken_Grotesk({
   subsets: ['latin'],
@@ -43,11 +33,11 @@ export const metadata = {
 };
 
 export const viewport = {
-  themeColor: '#121317',
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#f7f7f5' },
+    { media: '(prefers-color-scheme: dark)', color: '#111214' },
+  ],
 };
-
-// Runs before first paint: enables reveal styles, and backs them out if hydration never arrives.
-const revealBootstrap = `document.documentElement.classList.add('js');setTimeout(function(){if(!window.__revealReady)document.documentElement.classList.remove('js')},3000);`;
 
 // Structured data for search engines. Public profile facts only: no email or phone.
 const person = {
@@ -66,10 +56,7 @@ const person = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${bodoni.variable} ${hanken.variable}`} suppressHydrationWarning>
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: revealBootstrap }} />
-      </head>
+    <html lang="en" className={hanken.variable} suppressHydrationWarning>
       <body className="overflow-x-hidden">
         <a
           href="#main"

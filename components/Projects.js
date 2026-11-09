@@ -11,7 +11,7 @@ export default function Projects() {
   const prunify = readPrunifySelf();
 
   return (
-    <section id="projects" className="mx-auto w-full max-w-[1440px] px-margin-sm py-20 md:px-margin lg:px-margin-lg">
+    <section id="projects" className="mx-auto w-full max-w-[1200px] px-margin-sm py-20 md:px-margin lg:px-margin-lg">
       <SectionHeader
         eyebrow="Side projects"
         title="Things I built on my own"
@@ -26,9 +26,7 @@ export default function Projects() {
             <article
               key={p.title}
               id={`project-${p.slug}`}
-              data-reveal
-              style={{ '--reveal-delay': `${i * 110}ms`, '--glow': a.glow }}
-              className="glass glass-hover spotlight group flex flex-col justify-between rounded-xl p-7 hover:-translate-y-1"
+              className="glass glass-hover group flex flex-col justify-between rounded-xl p-7"
             >
               <div>
                 {p.preview && <ProjectPreview title={p.title} preview={p.preview} />}

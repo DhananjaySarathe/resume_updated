@@ -1,7 +1,7 @@
 // Eyebrow + serif headline, with an optional side note that sits bottom-right on wide screens.
 export default function SectionHeader({ icon: Icon, eyebrow, title, note, tone = 'text-primary', className = 'mb-12' }) {
   return (
-    <div className={`flex flex-col justify-between gap-4 md:flex-row md:items-end ${className}`} data-reveal>
+    <div className={`flex flex-col justify-between gap-4 md:flex-row md:items-end ${className}`}>
       <div>
         <div className={`eyebrow mb-2 ${tone}`}>
           {Icon && <Icon size={16} aria-hidden="true" />}
