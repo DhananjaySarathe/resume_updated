@@ -29,7 +29,7 @@ export default function Projects() {
       <SectionHeader
         eyebrow="Side projects"
         title="Things I built on my own"
-        note="Built outside work. All four are live, so you can try them."
+        note="Built outside work. Each one is live or open source, so you can try it."
       />
 
       <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-14">
