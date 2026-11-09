@@ -1,6 +1,8 @@
 /* A reading-first theme: solid surfaces, one calm accent, no background effects.
-   Light is the default; dark follows the visitor's system setting. Colours are RGB
-   triplets so Tailwind's opacity modifiers keep working (tailwind.config.js). */
+   The default is a warm light theme: off-white paper, warm charcoal text and a deep
+   terracotta accent used only for links, labels and the one button. The switch in the
+   header sets data-theme="dark" on <html> for the dark theme. Colours are RGB triplets
+   so Tailwind's opacity modifiers keep working (tailwind.config.js). */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -8,48 +10,46 @@
 @layer base {
   :root {
     color-scheme: light;
-    --c-background: 247 247 245;
-    --c-surface: 247 247 245;
-    --c-surface-container-lowest: 255 255 255;
-    --c-surface-container-low: 255 255 255;
-    --c-surface-container: 241 241 238;
-    --c-surface-container-high: 232 232 228;
-    --c-surface-container-highest: 214 214 208;
-    --c-surface-bright: 226 226 221;
-    --c-on-surface: 24 24 27;
-    --c-on-surface-variant: 68 68 74;
-    --c-outline: 100 100 108;
-    --c-outline-variant: 222 222 216;
-    --c-primary: 29 78 216;
-    --c-primary-container: 29 78 216;
-    --c-primary-fixed: 59 130 246;
+    --c-background: 250 247 242;
+    --c-surface: 250 247 242;
+    --c-surface-container-lowest: 255 253 249;
+    --c-surface-container-low: 255 253 249;
+    --c-surface-container: 243 238 229;
+    --c-surface-container-high: 236 229 217;
+    --c-surface-container-highest: 220 210 194;
+    --c-surface-bright: 231 223 210;
+    --c-on-surface: 43 38 34;
+    --c-on-surface-variant: 92 82 74;
+    --c-outline: 112 101 91;
+    --c-outline-variant: 229 220 205;
+    --c-primary: 163 67 31;
+    --c-primary-container: 163 67 31;
+    --c-primary-fixed: 196 98 60;
     --c-on-primary: 255 255 255;
-    --c-secondary: 13 108 100;
-    --c-tertiary: 154 70 6;
+    --c-secondary: 77 102 63;
+    --c-tertiary: 138 90 18;
   }
 
-  @media (prefers-color-scheme: dark) {
-    :root {
-      color-scheme: dark;
-      --c-background: 17 18 20;
-      --c-surface: 17 18 20;
-      --c-surface-container-lowest: 12 13 15;
-      --c-surface-container-low: 24 25 28;
-      --c-surface-container: 33 34 38;
-      --c-surface-container-high: 42 44 48;
-      --c-surface-container-highest: 54 56 61;
-      --c-surface-bright: 48 50 55;
-      --c-on-surface: 236 236 239;
-      --c-on-surface-variant: 184 188 196;
-      --c-outline: 140 145 154;
-      --c-outline-variant: 48 51 56;
-      --c-primary: 138 173 255;
-      --c-primary-container: 47 95 224;
-      --c-primary-fixed: 120 160 255;
-      --c-on-primary: 255 255 255;
-      --c-secondary: 94 207 191;
-      --c-tertiary: 240 178 90;
-    }
+  :root[data-theme='dark'] {
+    color-scheme: dark;
+    --c-background: 17 18 20;
+    --c-surface: 17 18 20;
+    --c-surface-container-lowest: 12 13 15;
+    --c-surface-container-low: 24 25 28;
+    --c-surface-container: 33 34 38;
+    --c-surface-container-high: 42 44 48;
+    --c-surface-container-highest: 54 56 61;
+    --c-surface-bright: 48 50 55;
+    --c-on-surface: 236 236 239;
+    --c-on-surface-variant: 184 188 196;
+    --c-outline: 140 145 154;
+    --c-outline-variant: 48 51 56;
+    --c-primary: 138 173 255;
+    --c-primary-container: 47 95 224;
+    --c-primary-fixed: 120 160 255;
+    --c-on-primary: 255 255 255;
+    --c-secondary: 94 207 191;
+    --c-tertiary: 240 178 90;
   }
 
   html {
@@ -146,4 +146,11 @@
     transition-duration: 0.01ms !important;
     transition-delay: 0ms !important;
   }
+}
+
+/* Set for one frame by the theme switch, so every colour changes at once. */
+.theme-switching *,
+.theme-switching *::before,
+.theme-switching *::after {
+  transition: none !important;
 }

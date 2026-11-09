@@ -1,6 +1,8 @@
 /** @type {import('tailwindcss').Config} */
 // A calm, high-contrast theme built for reading. Colours live in app/globals.css.
 module.exports = {
+  // dark: utilities follow the header switch, which sets data-theme="dark" on <html>.
+  darkMode: ['class', '[data-theme="dark"]'],
   content: [
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',

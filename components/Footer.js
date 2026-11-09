@@ -59,7 +59,7 @@ export default function Footer() {
           <div className="max-w-[62ch] space-y-3 text-body-sm text-on-surface-variant lg:col-span-7">
             <h2 className="eyebrow text-primary">About this page</h2>
             <p>
-              Set in Hanken Grotesk, in a light or dark theme that follows your system setting.
+              Set in Hanken Grotesk on a warm light theme. The moon button in the header switches to a dark one, and the page remembers your choice.
             </p>
             {sha && (
               <p>

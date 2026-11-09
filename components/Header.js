@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import { navLinks, profile } from '@/lib/data';
+import ThemeToggle from './ThemeToggle';
 
 export default function Header() {
   const [active, setActive] = useState('overview');
@@ -140,6 +141,7 @@ export default function Header() {
         </nav>
 
         <div className="flex items-center gap-2 sm:gap-3">
+          <ThemeToggle />
           <a
             href={profile.resume}
             target="_blank"

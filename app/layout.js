@@ -33,11 +33,11 @@ export const metadata = {
 };
 
 export const viewport = {
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#f7f7f5' },
-    { media: '(prefers-color-scheme: dark)', color: '#111214' },
-  ],
+  themeColor: '#faf7f2',
 };
+
+// Runs before first paint, so a saved dark choice never flashes the light theme first.
+const themeBootstrap = `try{if(localStorage.getItem('theme')==='dark'){document.documentElement.dataset.theme='dark';var m=document.querySelector('meta[name=theme-color]');if(m)m.content='#111214'}}catch(e){}`;
 
 // Structured data for search engines. Public profile facts only: no email or phone.
 const person = {
@@ -57,6 +57,9 @@ const person = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={hanken.variable} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeBootstrap }} />
+      </head>
       <body className="overflow-x-hidden">
         <a
           href="#main"
