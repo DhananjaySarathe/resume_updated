@@ -2,6 +2,7 @@ import { ArrowUpRight } from 'lucide-react';
 import { accents, projects } from '@/lib/data';
 import { readPrunifySelf } from '@/lib/prunifySelf';
 import ProjectNotes from './ProjectNotes';
+import ProjectPreview from './ProjectPreview';
 import PrunifyResult from './PrunifyResult';
 import SectionHeader from './SectionHeader';
 import { icons } from './icons';
@@ -30,7 +31,8 @@ export default function Projects() {
               className="glass glass-hover spotlight group flex flex-col justify-between rounded-xl p-7 hover:-translate-y-1"
             >
               <div>
-                <div className="mb-6 flex items-center justify-between">
+                {p.preview && <ProjectPreview title={p.title} preview={p.preview} />}
+                <div className="project-head mb-6 flex items-center justify-between">
                   <span className={`rounded-lg bg-surface-container p-3 ${a.text}`}>
                     <Icon size={24} aria-hidden="true" />
                   </span>

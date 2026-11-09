@@ -77,7 +77,8 @@
   #about li a[href^='#fn'],
   #about p,
   #metrics .glass > div:first-child,
-  #projects article > div:first-child > div:first-child {
+  #projects .project-head,
+  #projects .project-preview {
     display: none !important;
   }
 
