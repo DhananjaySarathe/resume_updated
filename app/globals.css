@@ -133,6 +133,18 @@
   }
 }
 
+/* A small, one-time rise as cards and headings arrive (components/ScrollReveal.js). */
+.reveal-ready [data-reveal] {
+  transition:
+    opacity 0.45s ease-out,
+    transform 0.45s ease-out;
+  transition-delay: var(--reveal-delay, 0ms);
+}
+.reveal-ready [data-reveal]:not([data-revealed='true']) {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

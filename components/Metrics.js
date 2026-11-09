@@ -33,6 +33,8 @@ export default function Metrics() {
           return (
             <div
               key={m.title}
+              data-reveal
+              style={{ '--reveal-delay': `${(i % 4) * 60}ms` }}
               className="glass glass-hover group flex flex-col justify-between rounded-xl p-6"
             >
               <div className="mb-8 flex items-center justify-between">

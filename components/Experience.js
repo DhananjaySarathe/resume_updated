@@ -3,10 +3,11 @@ import SectionHeader from './SectionHeader';
 import TimelineTrack from './TimelineTrack';
 import { icons } from './icons';
 
+// A job's dot is an empty ring until the timeline fill reaches it (TimelineTrack sets data-reached).
 const nodeColor = {
-  primary: 'bg-primary',
-  secondary: 'bg-secondary',
-  outline: 'bg-outline-variant',
+  primary: 'data-[reached=true]:border-primary data-[reached=true]:bg-primary',
+  secondary: 'data-[reached=true]:border-secondary data-[reached=true]:bg-secondary',
+  outline: 'data-[reached=true]:border-outline data-[reached=true]:bg-outline',
 };
 const companyColor = { primary: 'text-primary', secondary: 'text-secondary', outline: 'text-on-surface-variant' };
 
@@ -16,16 +17,19 @@ export default function Experience() {
       <SectionHeader eyebrow="Experience" title="Where I&apos;ve worked" className="mb-14" />
 
       <div className="relative pl-8 md:pl-12 print:pl-0">
-        <TimelineTrack className="bottom-3 left-2.5 top-3 md:left-4" />
+        <TimelineTrack className="bottom-3 left-[11px] top-3 md:left-[17px]" />
         <ol className="space-y-12">
           {experience.map((job) => {
             return (
-              <li key={job.role} className="relative">
+              <li key={job.role} className="relative" data-reveal>
                 <div
                   aria-hidden="true"
                   className="absolute -left-[31px] top-1 flex h-5 w-5 items-center justify-center rounded-pill bg-background md:-left-[41px] print:hidden"
                 >
-                  <span className={`h-3 w-3 rounded-pill ${nodeColor[job.accent]}`} />
+                  <span
+                    data-timeline-node
+                    className={`h-3 w-3 rounded-pill border-2 border-outline-variant bg-background transition-colors duration-300 ${nodeColor[job.accent]}`}
+                  />
                 </div>
 
                 <div className="glass glass-hover rounded-xl p-6 md:p-8">

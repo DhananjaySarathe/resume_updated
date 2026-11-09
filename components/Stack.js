@@ -14,6 +14,8 @@ export default function Stack() {
           return (
             <div
               key={group.title}
+              data-reveal
+              style={{ '--reveal-delay': `${(i % 4) * 60}ms` }}
               className="glass glass-hover rounded-xl p-6"
             >
               <div className={`mb-4 flex items-center gap-2 ${a.text}`}>

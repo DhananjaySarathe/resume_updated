@@ -21,7 +21,7 @@ export default function Connect() {
       className="mx-auto w-full max-w-[1200px] px-margin-sm py-16 md:px-margin lg:px-margin-lg print:hidden"
     >
       <SectionHeader eyebrow="Contact" title="Contact details" className="mb-8" />
-      <dl className="grid grid-cols-1 gap-x-10 gap-y-5 rounded-xl border border-outline-variant bg-surface-container-low p-6 sm:grid-cols-2 md:p-8 lg:grid-cols-3">
+      <dl data-reveal className="grid grid-cols-1 gap-x-10 gap-y-5 rounded-xl border border-outline-variant bg-surface-container-low p-6 sm:grid-cols-2 md:p-8 lg:grid-cols-3">
         {details.map(({ label, value, href, external }) => (
           <div key={label} className="min-w-0">
             <dt className="text-label-sm text-on-surface-variant">{label}</dt>

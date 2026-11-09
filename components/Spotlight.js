@@ -20,7 +20,7 @@ function Proof({ proof, link }) {
 export default function Spotlight() {
   return (
     <section id="about" className="mx-auto w-full max-w-[1200px] px-margin-sm py-16 md:px-margin lg:px-margin-lg">
-      <div className="relative rounded-xl border border-outline-variant bg-surface-container-low p-6 sm:p-8 md:p-12">
+      <div data-reveal className="relative rounded-xl border border-outline-variant bg-surface-container-low p-6 sm:p-8 md:p-12">
         <div className="relative grid grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:items-start lg:gap-14">
           {/* The photo stays in view while the rules and their notes scroll past. */}
           <div className="flex justify-center lg:sticky lg:top-28 lg:col-span-5 print:hidden">

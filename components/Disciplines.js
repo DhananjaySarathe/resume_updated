@@ -22,6 +22,8 @@ export default function Disciplines() {
           return (
             <article
               key={d.title}
+              data-reveal
+              style={{ '--reveal-delay': `${(i % 4) * 60}ms` }}
               className="glass glass-hover group rounded-xl p-8"
             >
               <div className="mb-6 flex items-start justify-between">

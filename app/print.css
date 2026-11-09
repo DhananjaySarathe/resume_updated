@@ -1,5 +1,12 @@
 /* Cmd+P prints a plain resume: dark ink on white, no background, photos or buttons. */
 @media print {
+  /* Cards that never scrolled into view print anyway. */
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
   @page {
     size: A4;
     margin: 14mm 16mm;

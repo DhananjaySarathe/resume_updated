@@ -26,6 +26,8 @@ export default function Projects() {
             <article
               key={p.title}
               id={`project-${p.slug}`}
+              data-reveal
+              style={{ '--reveal-delay': `${(i % 4) * 60}ms` }}
               className="glass glass-hover group flex flex-col justify-between rounded-xl p-7"
             >
               <div>

@@ -8,6 +8,7 @@ import Projects from '@/components/Projects';
 import Stack from '@/components/Stack';
 import Connect from '@/components/Connect';
 import Footer from '@/components/Footer';
+import ScrollReveal from '@/components/ScrollReveal';
 
 export default function Home() {
   return (
@@ -24,6 +25,7 @@ export default function Home() {
         <Connect />
       </main>
       <Footer />
+      <ScrollReveal />
     </>
   );
 }
