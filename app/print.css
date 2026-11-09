@@ -81,9 +81,18 @@
     grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
     gap: 1rem !important;
   }
+  /* The pinned stage is hidden on paper; the chapters print two to a row. */
   #projects .grid {
+    display: block !important;
+  }
+  #projects .project-chapters {
+    display: grid !important;
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
     gap: 1.25rem !important;
+  }
+  #projects .project-chapters > li {
+    min-height: 0 !important;
+    padding-bottom: 0 !important;
   }
   #quickads-modules {
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
